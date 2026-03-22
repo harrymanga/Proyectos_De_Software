@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=JarTool
+Exec=jartool
+Icon=jartool
+Type=Application
+Categories=Development;Utility;
+Comment=Extract and compress JAR files
+Terminal=false
+StartupNotify=true
+MimeType=application/java-archive;

@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-03-21 19:53:40.253496",
+  "languages": {
+    "es": {
+      "total_keys": 42,
+      "missing_keys": [],
+      "coverage_percent": 100.0,
+      "is_valid": true
+    },
+    "en": {
+      "total_keys": 42,
+      "missing_keys": [],
+      "coverage_percent": 100.0,
+      "is_valid": true
+    }
+  },
+  "summary": {
+    "total_languages": 2,
+    "total_keys": 42,
+    "all_valid": true
+  }
+}
