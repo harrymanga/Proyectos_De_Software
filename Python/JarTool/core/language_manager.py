@@ -5,7 +5,7 @@ Manages application language with support for ES, EN, FR, DE, PT, AR
 
 import os
 import json
-from PyQt6.QtCore import QCoreApplication, QSettings, QTranslator, Qt
+from PyQt6.QtCore import QCoreApplication, QSettings, QTranslator, Qt, QLocale
 from PyQt6.QtWidgets import QApplication
 from typing import Dict, List, Optional
 

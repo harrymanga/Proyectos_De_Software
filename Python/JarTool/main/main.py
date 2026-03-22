@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import QSettings
+from PyQt6.QtGui import QIcon
 
 from gui import JarToolWindow
 from core import ThemeManager, LanguageManager
@@ -25,6 +26,11 @@ def main():
     app.setApplicationName("JarTool")
     app.setApplicationVersion("2.0")
     app.setOrganizationName("JarTool")
+    
+    # Set application icon
+    icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'icons', 'jartool.ico')
+    if os.path.exists(icon_path):
+        app.setWindowIcon(QIcon(icon_path))
     
     # Initialize managers
     theme_manager = ThemeManager()

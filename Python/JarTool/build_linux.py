@@ -24,12 +24,19 @@ def check_dependencies():
         if not shutil.which(cmd):
             missing.append(name)
     
+    # Check PyQt6
+    try:
+        import PyQt6
+        print("✅ PyQt6 found")
+    except ImportError:
+        missing.append('PyQt6')
+    
     if missing:
         print("❌ Missing dependencies:")
         for dep in missing:
             print(f"   - {dep}")
         print("\n📦 Install with:")
-        print("   pip install pyinstaller")
+        print("   pip install pyinstaller PyQt6")
         print("   # Download appimagetool from:")
         print("   # https://github.com/AppImage/AppImageKit/releases")
         return False
@@ -53,7 +60,7 @@ Name=JarTool
 Exec=jartool
 Icon=jartool
 Type=Application
-Categories=Development;Utility;
+Categories=Development;
 Comment=Extract and compress JAR files
 Terminal=false
 StartupNotify=true
@@ -121,7 +128,7 @@ def build_executable():
     print("🔨 Building Linux executable...")
     
     cmd = [
-        'pyinstaller',
+        sys.executable, '-m', 'PyInstaller',
         '--name=JarTool',
         '--windowed',
         '--onefile',
@@ -129,7 +136,7 @@ def build_executable():
         '--noconfirm',
         '--distpath=AppDir/usr/bin',
         '--add-data=translations:translations',
-        '--hidden-import=PyQt6.sip',
+        '--collect-all=PyQt6',
         '--hidden-import=core.jar_handler',
         '--hidden-import=core.theme_manager',
         '--hidden-import=core.language_manager',
@@ -162,13 +169,42 @@ def copy_resources():
         shutil.copytree('translations', 'AppDir/translations', dirs_exist_ok=True)
         print("✅ Copied translations")
     
-    # Create placeholder icon
-    # TODO: Replace with actual icon
+    # Handle icon
     icon_path = 'AppDir/usr/share/icons/hicolor/256x256/apps/jartool.png'
-    # Create a simple placeholder or copy existing
-    if not os.path.exists(icon_path):
-        # Create empty placeholder
-        open(icon_path, 'a').close()
+    icon_root_path = 'AppDir/jartool.png'
+    
+    # Try to copy existing icon from icons folder
+    source_icon = None
+    if os.path.exists('icons/jartool.png'):
+        source_icon = 'icons/jartool.png'
+    elif os.path.exists('icons/jartool.ico'):
+        # Convert ICO to PNG if needed (for now, just copy as PNG)
+        source_icon = 'icons/jartool.ico'
+    
+    if source_icon:
+        shutil.copy2(source_icon, icon_path)
+        shutil.copy2(source_icon, icon_root_path)
+        print(f"✅ Copied icon: {source_icon}")
+    else:
+        # Create a simple placeholder icon
+        try:
+            from PIL import Image, ImageDraw
+            # Create a simple 256x256 icon
+            img = Image.new('RGBA', (256, 256), (52, 152, 219, 255))  # Blue background
+            draw = ImageDraw.Draw(img)
+            # Draw a simple jar shape
+            draw.rectangle([50, 80, 206, 180], fill=(255, 255, 255, 255))
+            draw.rectangle([70, 60, 186, 80], fill=(255, 255, 255, 255))
+            draw.rectangle([90, 40, 166, 60], fill=(255, 255, 255, 255))
+            
+            img.save(icon_path)
+            img.save(icon_root_path)
+            print("✅ Created placeholder icon")
+        except ImportError:
+            # Create empty icon files as last resort
+            open(icon_path, 'a').close()
+            open(icon_root_path, 'a').close()
+            print("⚠️  Created empty icon files (install Pillow for better icons)")
 
 
 def create_appimage_builder_config():
@@ -272,12 +308,19 @@ def create_manual_appimage():
         print("📥 Download from: https://github.com/AppImage/AppImageKit/releases")
         return False
     
+    # Check if executable exists in AppDir
+    exe_path = 'AppDir/usr/bin/JarTool'
+    if not os.path.exists(exe_path):
+        print(f"❌ Executable not found: {exe_path}")
+        return False
+    
     # Build AppImage
     output_name = 'JarTool-2.0.0-x86_64.AppImage'
     cmd = [appimagetool, 'AppDir', output_name]
     
     try:
-        subprocess.check_call(cmd)
+        print(f"🔧 Running: {' '.join(cmd)}")
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         print(f"✅ AppImage created: {output_name}")
         
         # Move to dist
@@ -290,6 +333,15 @@ def create_manual_appimage():
         return True
     except subprocess.CalledProcessError as e:
         print(f"❌ AppImage creation failed: {e}")
+        if e.stdout:
+            print(f"📤 stdout: {e.stdout}")
+        if e.stderr:
+            print(f"📥 stderr: {e.stderr}")
+        print("\n💡 Possible solutions:")
+        print("   1. Ensure appimagetool has execute permissions")
+        print("   2. Check if AppDir structure is correct")
+        print("   3. Try running appimagetool manually:")
+        print(f"      {appimagetool} AppDir {output_name}")
         return False
 
 
@@ -376,6 +428,10 @@ def main():
         response = input("Continue anyway? (y/n): ")
         if response.lower() != 'y':
             return 1
+    
+    # Check dependencies
+    if not check_dependencies():
+        return 1
     
     # Clean previous builds
     clean_build_dirs()

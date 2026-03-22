@@ -46,7 +46,7 @@ def create_windows_build():
     
     # PyInstaller command
     cmd = [
-        'pyinstaller',
+        sys.executable, '-m', 'PyInstaller',
         '--name=JarTool',
         '--windowed',  # No console window
         '--onefile',   # Single executable file
@@ -54,8 +54,9 @@ def create_windows_build():
         '--noconfirm', # Overwrite existing
         # Add data files
         '--add-data=translations;translations',
+        # Collect all PyQt6 modules
+        '--collect-all=PyQt6',
         # Hidden imports
-        '--hidden-import=PyQt6.sip',
         '--hidden-import=core.jar_handler',
         '--hidden-import=core.theme_manager',
         '--hidden-import=core.language_manager',
@@ -69,8 +70,8 @@ def create_windows_build():
         '--exclude-module=PIL',
         '--exclude-module=scipy',
         '--exclude-module=sklearn',
-        # Icon (optional - add when available)
-        # '--icon=icons/jartool.ico',
+        # Icon
+        '--icon=icons/jartool.ico',
         # Upx compression
         '--upx-dir=upx',
         # Main script
