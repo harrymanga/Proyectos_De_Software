@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>233</width>
+    <height>341</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Retro Thumbnails PRO</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout">
+    <item>
+     <widget class="QPushButton" name="btnAddFolder">
+      <property name="text">
+       <string>Añadir carpeta</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnAddFiles">
+      <property name="text">
+       <string>Añadir archivos ROM</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="listFolders"/>
+    </item>
+    <item>
+     <widget class="QComboBox" name="comboSystem"/>
+    </item>
+    <item>
+     <widget class="QComboBox" name="comboArt">
+      <item>
+       <property name="text">
+        <string>Named_Boxarts</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Named_Snaps</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Named_Titles</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Named_Logos</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="chkRename">
+      <property name="text">
+       <string>Renombrar ROMs</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="chkMatchSelection">
+      <property name="text">
+       <string>Buscar coincidencias alternativas</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnStart">
+      <property name="text">
+       <string>Iniciar</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="progressBar"/>
+    </item>
+    <item>
+     <widget class="QTextEdit" name="txtLog"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>233</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuArchivo">
+    <property name="title">
+     <string>Archivo</string>
+    </property>
+    <addaction name="actionSalir"/>
+   </widget>
+   <widget class="QMenu" name="menuTema">
+    <property name="title">
+     <string>Tema</string>
+    </property>
+    <addaction name="actionModoOscuro"/>
+   </widget>
+   <widget class="QMenu" name="menuIdioma">
+    <property name="title">
+     <string>Idioma</string>
+    </property>
+    <addaction name="actionEspanol"/>
+    <addaction name="actionEnglish"/>
+    <addaction name="actionFrancais"/>
+   </widget>
+   <addaction name="menuArchivo"/>
+   <addaction name="menuTema"/>
+   <addaction name="menuIdioma"/>
+  </widget>
+  <action name="actionSalir">
+   <property name="text">
+    <string>Salir</string>
+   </property>
+  </action>
+  <action name="actionModoOscuro">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Modo oscuro</string>
+   </property>
+  </action>
+  <action name="actionEspanol">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Español</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionFrancais">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Français</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

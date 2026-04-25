@@ -1,0 +1,12 @@
+{
+  ".gba": "Nintendo - Game Boy Advance",
+  ".ciso, .gcm, .gcz, .iso, .nkit.gcz, .nkit.iso, .rvz": "Nintendo - GameCube",
+  ".n64, .v64, .z64": "Nintendo - Nintendo 64",
+  ".nes": "Nintendo - Nintendo Entertainment System",
+  ".nds": "Nintendo - Nintendo DS",
+  ".sfc, .smc": "Nintendo - Super Nintendo Entertainment System",
+  ".chd, .gdi": "Sega - Dreamcast",
+  ".bin, .cue": "Sony - PlayStation",
+  ".chd, .cso, .elf, .iso, .pbp, .prx": "Sony - PlayStation Portable",
+  ".chd, .iso": "Sony - PlayStation 2"
+}
