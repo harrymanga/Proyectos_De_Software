@@ -5,6 +5,7 @@
   ".nes": "Nintendo - Nintendo Entertainment System",
   ".nds": "Nintendo - Nintendo DS",
   ".sfc, .smc": "Nintendo - Super Nintendo Entertainment System",
+  ".iso, .nkit.iso, .rvz, .wbfs, .wup": "Nintendo - Wii",
   ".chd, .gdi": "Sega - Dreamcast",
   ".bin, .cue": "Sony - PlayStation",
   ".chd, .cso, .elf, .iso, .pbp, .prx": "Sony - PlayStation Portable",
