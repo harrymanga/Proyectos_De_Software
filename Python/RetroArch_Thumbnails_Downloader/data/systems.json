@@ -1,5 +1,6 @@
 {
   ".gba": "Nintendo - Game Boy Advance",
+  ".gbc": "Nintendo - Game Boy Color",
   ".ciso, .gcm, .gcz, .iso, .nkit.gcz, .nkit.iso, .rvz": "Nintendo - GameCube",
   ".n64, .v64, .z64": "Nintendo - Nintendo 64",
   ".nes": "Nintendo - Nintendo Entertainment System",
