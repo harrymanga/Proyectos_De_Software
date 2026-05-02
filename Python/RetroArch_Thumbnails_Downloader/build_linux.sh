@@ -1,37 +1,44 @@
 #!/bin/bash
 
-echo "Building RetroArch Thumbnails Downloader for Linux..."
+echo "Construyendo RetroArch Thumbnails Downloader para Linux..."
 
 # Check if virtual environment exists
+# Comprobar si existe un entorno virtual
 if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
+    echo "Creando un entorno virtual..."
     python3 -m venv venv
 fi
 
 # Activate virtual environment
+# Activar el entorno virtual
 source venv/bin/activate
 
 # Install dependencies
-echo "Installing dependencies..."
+# Instalar dependencias
+echo "Instalando dependencias..."
 pip install -r requirements.txt
 pip install pyinstaller
 
 # Build with PyInstaller
-echo "Building executable..."
-pyinstaller retro_thumbnails.spec --clean --noconfirm
+# Construir con PyInstaller
+echo "Construyendo ejecutable..."
+python -m PyInstaller retro_thumbnails.spec --clean --noconfirm
 
 # Create dist directory if it doesn't exist
+# Crear directorio dist si no existe
 mkdir -p dist/linux
 
 # Copy executable to dist directory
+# Copiar ejecutable al directorio dist
 if [ -f "dist/RetroArch Thumbnails Downloader" ]; then
     cp "dist/RetroArch Thumbnails Downloader" "dist/linux/"
     chmod +x "dist/linux/RetroArch Thumbnails Downloader"
-    echo "Build completed successfully!"
-    echo "Executable located at: dist/linux/RetroArch Thumbnails Downloader"
+    echo "¡Construcción completada con éxito!"
+    echo "Ejecutable ubicado en: dist/linux/RetroArch Thumbnails Downloader"
 else
-    echo "Build failed!"
+    echo "¡Error de construcción!"
 fi
 
 # Deactivate virtual environment
+# Desactivar entorno virtual
 deactivate

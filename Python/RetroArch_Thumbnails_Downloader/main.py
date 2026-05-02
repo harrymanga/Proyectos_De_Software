@@ -14,6 +14,7 @@ from ui.frmMainWindow_ui import Ui_MainWindow
 from core.scanner import expand_systems
 from ui.match_dialog import MatchSelectionDialog
 from core.scanner import detect_system
+from core.scanner import validate_system_extension
 from core.matcher import normalize
 from core.matcher_search import search_matches
 from core.downloader import download
@@ -36,13 +37,14 @@ class DownloadWorker(QThread):
     finished = pyqtSignal(dict)
     request_match_selection = pyqtSignal(str, str, str, list, object)  # file, system, base_name, matches, exact_match
     
-    def __init__(self, folders, files, art_type, rename_roms, enable_match_selection=False):
+    def __init__(self, folders, files, art_type, rename_roms, enable_match_selection=False, selected_system=None):
         super().__init__()
         self.folders = folders
         self.files = files  # Lista de archivos individuales
         self.art_type = art_type
         self.rename_roms = rename_roms
         self.enable_match_selection = enable_match_selection
+        self.selected_system = selected_system  # Sistema seleccionado por el usuario
         self.should_stop = False
         self.user_selections = {}  # Almacenar selecciones del usuario
         self.selection_event = threading.Event()  # Evento para sincronización
@@ -73,11 +75,21 @@ class DownloadWorker(QThread):
                 self.progress_updated.emit(processed, total_files)
                 
                 try:
-                    system = detect_system(file)
-                    if not system:
-                        results["errors"] += 1
-                        results["details"].append((file, "Sistema desconocido"))
-                        continue
+                    # Si el usuario seleccionó un sistema específico, usarlo y validar la extensión
+                    if self.selected_system:
+                        if not validate_system_extension(file, self.selected_system):
+                            results["errors"] += 1
+                            results["details"].append((file, f"Extensión no compatible con sistema seleccionado: {self.selected_system}"))
+                            self.log_message.emit(f"✗ {os.path.basename(file)}: Extensión no compatible con {self.selected_system}")
+                            continue
+                        system = self.selected_system
+                    else:
+                        # Detección automática por extensión
+                        system = detect_system(file)
+                        if not system:
+                            results["errors"] += 1
+                            results["details"].append((file, "Sistema desconocido"))
+                            continue
 
                     name = normalize(file)
                     if not name:
@@ -180,11 +192,21 @@ class DownloadWorker(QThread):
             self.progress_updated.emit(processed, total_files)
             
             try:
-                system = detect_system(file)
-                if not system:
-                    results["errors"] += 1
-                    results["details"].append((file, "Sistema desconocido"))
-                    continue
+                # Si el usuario seleccionó un sistema específico, usarlo y validar la extensión
+                if self.selected_system:
+                    if not validate_system_extension(file, self.selected_system):
+                        results["errors"] += 1
+                        results["details"].append((file, f"Extensión no compatible con sistema seleccionado: {self.selected_system}"))
+                        self.log_message.emit(f"✗ {os.path.basename(file)}: Extensión no compatible con {self.selected_system}")
+                        continue
+                    system = self.selected_system
+                else:
+                    # Detección automática por extensión
+                    system = detect_system(file)
+                    if not system:
+                        results["errors"] += 1
+                        results["details"].append((file, "Sistema desconocido"))
+                        continue
 
                 name = normalize(file)
                 if not name:
@@ -558,8 +580,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         art_type = self.comboArt.currentText()
         rename_roms = self.chkRename.isChecked()
         enable_match_selection = self.chkMatchSelection.isChecked()
+        selected_system = self.comboSystem.currentText() if self.comboSystem.currentIndex() > 0 else None
         
-        self.worker = DownloadWorker(self.folders, self.files, art_type, rename_roms, enable_match_selection)
+        self.worker = DownloadWorker(self.folders, self.files, art_type, rename_roms, enable_match_selection, selected_system)
         self.worker.progress_updated.connect(self.update_progress)
         self.worker.log_message.connect(self.add_log)
         self.worker.finished.connect(self.download_finished)

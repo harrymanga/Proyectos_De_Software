@@ -19,24 +19,76 @@ def check_virtual_env():
     """Check if virtual environment exists, create if not"""
     if not os.path.exists("venv"):
         print("Creando un entorno virtual...")
-        subprocess.run([sys.executable, "-m", "venv", "venv"], check=True)
+        try:
+            result = subprocess.run([sys.executable, "-m", "venv", "venv"], 
+                                  check=True, capture_output=True, text=True)
+            print("Entorno virtual creado exitosamente.")
+            
+            # Verificar que se crearon los archivos necesarios
+            if platform.system() == "Windows":
+                scripts_dir = os.path.join("venv", "Scripts")
+                python_exe = os.path.join(scripts_dir, "python.exe")
+            else:
+                scripts_dir = os.path.join("venv", "bin")
+                python_exe = os.path.join(scripts_dir, "python")
+            
+            if not os.path.exists(python_exe):
+                print(f"Error: No se encontró Python en el entorno virtual: {python_exe}")
+                print("El entorno virtual no se creó correctamente.")
+                sys.exit(1)
+                
+        except subprocess.CalledProcessError as e:
+            print(f"Error al crear el entorno virtual: {e}")
+            print(f"Stderr: {e.stderr}")
+            sys.exit(1)
+    else:
+        print("El entorno virtual ya existe.")
 
 
 def activate_venv():
     """Devuelve la ruta al Python del entorno virtual"""
     """Return the path to the virtual environment's python"""
     if platform.system() == "Windows":
-        return os.path.join("venv", "Scripts", "python.exe")
+        venv_python = os.path.join("venv", "Scripts", "python.exe")
     else:
-        return os.path.join("venv", "bin", "python")
+        venv_python = os.path.join("venv", "bin", "python")
+    
+    # Verificar si el ejecutable existe
+    if not os.path.exists(venv_python):
+        print(f"Error: No se encuentra el ejecutable de Python en: {venv_python}")
+        print("El entorno virtual no se creó correctamente o está incompleto.")
+        sys.exit(1)
+    
+    return venv_python
 
 
 def install_dependencies(venv_python):
     """Instala las dependencias desde requirements.txt"""
     """Install dependencies from requirements.txt"""
     print("Instalando dependencias...")
-    subprocess.run([venv_python, "-m", "pip", "install", "-r", "requirements.txt"], check=True)
-    subprocess.run([venv_python, "-m", "pip", "install", "pyinstaller"], check=True)
+    try:
+        # Actualizar pip primero
+        print("Actualizando pip...")
+        subprocess.run([venv_python, "-m", "pip", "install", "--upgrade", "pip"], 
+                      check=True, capture_output=True, text=True)
+        
+        # Instalar dependencias
+        print("Instalando requirements.txt...")
+        result = subprocess.run([venv_python, "-m", "pip", "install", "-r", "requirements.txt"], 
+                               check=True, capture_output=True, text=True)
+        print("Dependencias instaladas exitosamente.")
+        
+        # Instalar PyInstaller
+        print("Instalando PyInstaller...")
+        result = subprocess.run([venv_python, "-m", "pip", "install", "pyinstaller"], 
+                               check=True, capture_output=True, text=True)
+        print("PyInstaller instalado exitosamente.")
+        
+    except subprocess.CalledProcessError as e:
+        print(f"Error al instalar dependencias: {e}")
+        print(f"Stderr: {e.stderr}")
+        print(f"Stdout: {e.stdout}")
+        sys.exit(1)
 
 
 def build(venv_python):

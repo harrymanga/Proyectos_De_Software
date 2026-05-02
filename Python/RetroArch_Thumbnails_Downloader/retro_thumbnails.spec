@@ -2,31 +2,25 @@
 
 import os
 import sys
+from PyInstaller.utils.hooks import collect_all, collect_submodules
 
 block_cipher = None
+
+# Recopilar todos los módulos, binarios y datos de PyQt5
+pyqt5_datas, pyqt5_binaries, pyqt5_hiddenimports = collect_all('PyQt5')
 
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
+    binaries=pyqt5_binaries,
     datas=[
         ('data', 'data'),
         ('locales', 'locales'),
         ('ui', 'ui'),
-    ],
+    ] + pyqt5_datas,
     hiddenimports=[
-        'PyQt5',
-        'PyQt5.QtCore',
-        'PyQt5.QtGui',
-        'PyQt5.QtWidgets',
         'requests',
-        'json',
-        'os',
-        'sys',
-        'glob',
-        'threading',
-        'urllib.parse',
-    ],
+    ] + pyqt5_hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

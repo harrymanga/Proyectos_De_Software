@@ -42,3 +42,33 @@ def detect_system(file):
     systems = load_systems()
     expanded_systems = expand_systems(systems)
     return expanded_systems.get(ext, None)
+
+def validate_system_extension(file, system):
+    """Valida que un archivo sea compatible con un sistema específico.
+    
+    Consulta el JSON original directamente para manejar correctamente
+    extensiones compartidas entre múltiples sistemas (ej: .chd, .iso).
+    
+    Args:
+        file: Ruta del archivo
+        system: Nombre del sistema a validar (ej: "Nintendo - GameCube")
+    
+    Returns:
+        True si la extensión del archivo es compatible con el sistema, False en caso contrario
+    """
+    if not file or not system:
+        return False
+    
+    ext = os.path.splitext(file)[1].lower()
+    systems = load_systems()
+    
+    # Consultar el JSON original: buscar si la extensión pertenece al grupo del sistema
+    for key, value in systems.items():
+        if value != system:
+            continue
+        # Separar las extensiones del grupo y comparar
+        extensions = [e.strip() for e in key.split(',')]
+        if ext in extensions:
+            return True
+    
+    return False
