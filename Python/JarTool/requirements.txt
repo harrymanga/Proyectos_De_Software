@@ -1,2 +1,9 @@
+# GUI Framework
 PyQt6>=6.0.0
+
+# Packaging
 pyinstaller>=5.0
+
+# Build tools
+setuptools>=65.0.0
+wheel>=0.38.0
