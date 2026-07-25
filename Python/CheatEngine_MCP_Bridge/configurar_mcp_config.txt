@@ -1,0 +1,45 @@
+
+Ruta en winsurf : ~/.codeium/windsurf-next/mcp_config.json
+
+Contenido
+
+{
+  "mcpServers": {
+    "cheatengine": {
+      "command": "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/venv/bin/python",
+      "args": [
+        "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/MCP_Server/mcp_cheatengine.py"
+      ],
+      "env": {
+        "CE_MCP_TRANSPORT": "tcp",
+        "CE_MCP_HOST": "127.0.0.1",
+        "CE_MCP_PORT": "9876"
+      }
+    }
+  }
+}
+
+
+Ruta en opencode : ~/.config/opencode/opencode.json
+
+Contenido
+
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "cheatengine": {
+      "type": "local",
+      "command": [
+        "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/>
+        "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/>
+      ],
+      "enabled": true,
+      "environment": {
+        "CE_MCP_TRANSPORT": "tcp",
+        "CE_MCP_HOST": "127.0.0.1",
+        "CE_MCP_PORT": "9876"
+      }
+    }
+  }
+}
+

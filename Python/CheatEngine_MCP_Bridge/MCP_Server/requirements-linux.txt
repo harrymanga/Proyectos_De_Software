@@ -1,0 +1,8 @@
+# Dependency file for Linux systems
+# Install: pip install -r requirements-linux.txt
+
+# MCP SDK (Model Context Protocol) - Required for AI agent communication
+mcp>=1.0.0
+
+# Note: pywin32 is NOT needed on Linux.
+# The TCP relay (ce_tcp_relay.py) is used instead of Windows named pipes.

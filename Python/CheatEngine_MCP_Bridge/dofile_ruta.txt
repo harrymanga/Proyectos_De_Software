@@ -1,0 +1,4 @@
+
+RUTA
+
+dofile("/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/MCP_Server/ce_mcp_bridge.lua")
