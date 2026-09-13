@@ -1,59 +1,51 @@
-import requests
+"""Descarga de thumbnails con sesión compartida + logging."""
+from __future__ import annotations
+
 import os
 import urllib.parse
-from core.cache import exists, save, get_cache_path
+from pathlib import Path
+from typing import Optional
 
-def download(url, custom_path=None):
+import requests
+
+from core import logger as log
+from core.cache import exists, get_cache_path, save
+from core.http import get_session
+
+TIMEOUT = 10
+
+
+def download(url: str | None, custom_path: str | Path | None = None) -> Optional[str]:
     if not url:
         return None
-    
-    # Si se proporciona una ruta personalizada, usarla
+
     if custom_path:
-        # Verificar si ya existe en la ruta personalizada
-        filename = os.path.basename(url).replace('.png', '')
-        # Decodificar el nombre para que sea legible
-        decoded_filename = urllib.parse.unquote(filename)
-        custom_file = os.path.join(custom_path, f"{decoded_filename}.png")
-        
-        if os.path.exists(custom_file):
-            return custom_file
-        
+        filename = Path(urllib.parse.urlparse(url).path).name or "thumb.png"
+        decoded = urllib.parse.unquote(filename)
+        custom_file = Path(str(custom_path)) / decoded
+        if custom_file.exists():
+            return str(custom_file)
         try:
-            r = requests.get(url, timeout=10)
+            r = get_session().get(url, timeout=TIMEOUT)
             r.raise_for_status()
-            
-            if r.status_code == 200:
-                # Crear directorio si no existe
-                os.makedirs(custom_path, exist_ok=True)
-                # Guardar en la ruta personalizada
-                with open(custom_file, 'wb') as f:
-                    f.write(r.content)
-                return custom_file
-            else:
-                return None
+            custom_file.parent.mkdir(parents=True, exist_ok=True)
+            custom_file.write_bytes(r.content)
+            return str(custom_file)
         except requests.RequestException as e:
-            print(f"Error descargando {url}: {e}")
+            log.error(f"Error descargando {url}: {e}")
             return None
-        except Exception as e:
-            print(f"Error inesperado descargando {url}: {e}")
+        except OSError as e:
+            log.error(f"Error guardando {custom_file}: {e}")
             return None
-    
-    # Usar el sistema de caché por defecto
+
     if exists(url):
         return get_cache_path(url)
 
     try:
-        r = requests.get(url, timeout=10)
+        r = get_session().get(url, timeout=TIMEOUT)
         r.raise_for_status()
-        
-        if r.status_code == 200:
-            save(url, r.content)
-            return get_cache_path(url)
-        else:
-            return None
+        save(url, r.content)
+        return get_cache_path(url)
     except requests.RequestException as e:
-        print(f"Error descargando {url}: {e}")
-        return None
-    except Exception as e:
-        print(f"Error inesperado descargando {url}: {e}")
+        log.error(f"Error descargando {url}: {e}")
         return None

@@ -2,5 +2,5 @@
 # Install in the environment running the MCP server, for example:
 #   python3 -m pip install -r MCP_Server/requirements-tcp.txt
 
-# MCP SDK (Model Context Protocol) - Required for AI agent communication
-mcp>=1.0.0
+# MCP SDK - se pinnea <2 para evitar breaking changes (verificado con mcp 1.x)
+mcp>=1.0.0,<2

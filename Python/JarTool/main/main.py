@@ -5,9 +5,12 @@ Application entry point and initialization
 
 import sys
 import os
+from pathlib import Path
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Permite `python main/main.py` desde la raíz sin hacks duplicados
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import QSettings

@@ -37,6 +37,20 @@ def check_python_version():
     return True
 
 
+def _ask(prompt: str, default: str = "n") -> str:
+    """Pregunta sin bloquear CI: respeta JARTOOL_ASSUME_YES/--yes/--no-input."""
+    if os.environ.get("JARTOOL_ASSUME_YES", "").lower() in ("1", "y", "yes"):
+        return "y"
+    if "--yes" in sys.argv or "--no-input" in sys.argv:
+        return "y"
+    try:
+        if not sys.stdin.isatty():
+            return default
+    except Exception:
+        return default
+    return input(prompt)
+
+
 def check_pip_dependencies():
     """Check and install required pip packages"""
     required = ['PyInstaller', 'PyQt6']
@@ -50,7 +64,7 @@ def check_pip_dependencies():
     
     if missing:
         print(f"⚠️  Missing packages: {', '.join(missing)}")
-        response = input("Install now? (y/n): ")
+        response = _ask("Install now? (y/n): ")
         if response.lower() == 'y':
             subprocess.check_call([sys.executable, '-m', 'pip', 'install'] + missing)
         else:
@@ -118,7 +132,7 @@ def build_linux():
     if sys.platform != 'linux':
         print("⚠️  Cross-compilation for Linux not recommended")
         print("   Run this on Linux for best results")
-        response = input("Continue anyway? (y/n): ")
+        response = _ask("Continue anyway? (y/n): ")
         if response.lower() != 'y':
             return False
     
@@ -214,11 +228,11 @@ def run_tests():
             print("❌ Tests failed")
             print(result.stdout)
             print(result.stderr)
-            response = input("Continue with build anyway? (y/n): ")
+            response = _ask("Continue with build anyway? (y/n): ", default="n")
             return response.lower() == 'y'
     except Exception as e:
         print(f"⚠️  Could not run tests: {e}")
-        response = input("Continue with build anyway? (y/n): ")
+        response = _ask("Continue with build anyway? (y/n): ", default="n")
         return response.lower() == 'y'
 
 

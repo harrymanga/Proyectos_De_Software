@@ -1,34 +1,30 @@
-import re
-import os
-import urllib.parse
+"""Normalización de nombres de ROM a formato LibRetro."""
+from __future__ import annotations
 
-def normalize(name):
+import re
+import urllib.parse
+from pathlib import Path
+from typing import Optional
+
+_BRACKETS_RE = re.compile(r"\[.*?\]")
+_CLEAN_RE = re.compile(r"[^a-zA-Z0-9\s\(\)\-\_\#\.]")
+_SPACES_RE = re.compile(r"\s+")
+
+
+def normalize(name: str | Path | None) -> Optional[str]:
     if not name:
         return None
-    
-    # Extraer solo el nombre del archivo sin extensión
-    basename = os.path.basename(name)
-    name_without_ext = os.path.splitext(basename)[0]
-    
-    if not name_without_ext:
+    basename = Path(str(name)).stem
+    text = basename.strip()
+    if not text:
         return None
-    
-    # Mantener mayúsculas/minúsculas originales para mejor coincidencia
-    name = name_without_ext.strip()
-    
-    # Solo eliminar corchetes [ ] pero mantener paréntesis ( ) para regiones
-    name = re.sub(r"\[.*?\]", "", name)
-    
-    # Limpiar solo caracteres problemáticos para URLs pero mantener símbolos importantes
-    # Permitir: letras, números, espacios, (), -, _, #, .
-    name = re.sub(r"[^a-zA-Z0-9\s\(\)\-\_\#\.]", " ", name)
-    
-    # Normalizar espacios múltiples
-    name = re.sub(r"\s+", " ", name)
-    
-    result = name.strip()
-    if not result:
+    text = _BRACKETS_RE.sub("", text)
+    text = _CLEAN_RE.sub(" ", text)
+    text = _SPACES_RE.sub(" ", text).strip()
+    if not text:
         return None
-    
-    # Codificar para URL (manteniendo estructura original)
-    return urllib.parse.quote(result, safe='')
+    return urllib.parse.quote(text, safe="")
+
+
+def normalize_for_search(name: str) -> str:
+    return name.lower().replace(" ", "").replace("-", "").replace("_", "")

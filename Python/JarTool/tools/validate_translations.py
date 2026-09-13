@@ -10,9 +10,6 @@ import json
 from typing import Dict, List, Set
 import datetime
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
 def load_translation_file(file_path: str) -> Dict[str, str]:
     """Load translation file and return as dictionary"""
     try:
@@ -38,7 +35,7 @@ def get_all_translation_keys() -> List[str]:
         'compress_error', 'select_jar_files', 'select_folders',
         'select_output_dir', 'save_jar', 'jar_files', 'all_files',
         'custom_folder_dialog', 'custom_folder_instruction', 'add_folder',
-        'select_folder', 'browse_files', 'browse_folders'
+        'select_folder', 'select_folder_dialog', 'browse_files', 'browse_folders'
     ]
 
 
@@ -81,13 +78,14 @@ def validate_translations():
             all_valid = False
             continue
         
-        # Check for missing keys
-        translation_keys = set(translations.keys())
+        # Check for missing keys (ignorar _metadata)
+        content = {k: v for k, v in translations.items() if k != "_metadata"}
+        translation_keys = set(content.keys())
         missing_keys = expected_keys - translation_keys
         extra_keys = translation_keys - expected_keys
         
-        # Check for empty values
-        empty_values = [k for k, v in translations.items() if not v or v.strip() == '']
+        # Check for empty values (ignorar _metadata y no-str)
+        empty_values = [k for k, v in translations.items() if k != "_metadata" and (not isinstance(v, str) or not v.strip())]
         
         # Report results
         if missing_keys:
@@ -135,12 +133,12 @@ def generate_validation_report(translation_files: Dict[str, Dict[str, str]], exp
     }
     
     for lang_code, translations in translation_files.items():
-        translation_keys = set(translations.keys())
-        missing_keys = sorted(list(expected_keys - translation_keys))
-        coverage = len(translation_keys) / len(expected_keys) * 100
-        
+        content_keys = {k for k in translations.keys() if k != "_metadata"}
+        missing_keys = sorted(list(expected_keys - content_keys))
+        coverage = len(content_keys) / len(expected_keys) * 100
+
         report['languages'][lang_code] = {
-            'total_keys': len(translations),
+            'total_keys': len(content_keys),
             'missing_keys': missing_keys,
             'coverage_percent': coverage,
             'is_valid': len(missing_keys) == 0
@@ -186,17 +184,17 @@ def check_consistency():
         print("❌ Need at least 2 translation files to check consistency")
         return
     
-    # Get reference keys (from first file)
+    # Get reference keys (ignorar _metadata)
     reference_lang = list(all_translations.keys())[0]
-    reference_keys = set(all_translations[reference_lang].keys())
-    
+    reference_keys = {k for k in all_translations[reference_lang].keys() if k != "_metadata"}
+
     # Check each language against reference
     inconsistencies = {}
     for lang_code, translations in all_translations.items():
         if lang_code == reference_lang:
             continue
-        
-        lang_keys = set(translations.keys())
+
+        lang_keys = {k for k in translations.keys() if k != "_metadata"}
         
         # Find keys in reference but not in this language
         missing_in_lang = reference_keys - lang_keys

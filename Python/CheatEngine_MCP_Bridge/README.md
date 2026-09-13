@@ -185,6 +185,17 @@ Use the `ping` tool to verify connectivity:
 {"success": true, "version": "12.0.0", "message": "CE MCP Bridge Active"}
 ```
 
+### Launcher `ce_bridge.sh` (Linux/wine)
+
+```bash
+./ce_bridge.sh --transport pipe                        # servidor, pipe Windows
+./ce_bridge.sh --transport tcp --role server            # servidor vía relay
+./ce_bridge.sh --transport tcp --role relay             # relay vía wine
+./ce_bridge.sh --transport tcp --role all               # relay fondo + server
+```
+
+Los `*_start.sh` clásicos siguen funcionando como wrappers compatibles.
+
 ### 4. Start Asking Questions
 ```
 "What process is attached?"
@@ -355,7 +366,22 @@ AI_Context/
 
 ## Testing
 
-Running the test:
+Unitarios portables (sin CE, sin red):
+
+```bash
+pip install "mcp>=1.0.0,<2" pytest
+python -m pytest MCP_Server/tests -q
+```
+
+Lint (archivos nuevos) + shellcheck:
+
+```bash
+ruff check MCP_Server/protocol.py MCP_Server/stdio_patch.py MCP_Server/tests/
+shellcheck -S warning ce_bridge.sh ce_relay_start.sh ce_tcp_relay_start.sh mcp_cheatengine_start.sh
+```
+
+E2E manual (requiere CE + pipe viva):
+
 ```bash
 python MCP_Server/test_mcp.py
 ```

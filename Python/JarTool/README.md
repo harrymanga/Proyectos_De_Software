@@ -8,33 +8,36 @@ A modern PyQt6 application for extracting and compressing JAR files with support
 - **Batch Compression**: Compress multiple folders into JAR files
 - **Smart Naming**: Automatically creates folders with JAR file names during extraction
 - **Theme Support**: Switch between light and dark themes
-- **Multi-language**: Support for Spanish and English
+- **Multi-language**: es, en, fr, de, pt, ar (43 claves, RTL para árabe)
 - **Modular Architecture**: Clean separation of GUI, core logic, and tests
 
 ## Project Structure
 
 ```
-JarTool1/
+JarTool/
 ├── core/                   # Core functionality
-│   ├── jar_handler.py     # JAR file operations using jar command
+│   ├── jar_handler.py     # JAR ops (shutil.which, timeout, logging, pathlib)
 │   ├── theme_manager.py   # Theme management (light/dark)
-│   ├── language_manager.py # Language management (es/en)
+│   ├── language_manager.py # Único manager (JSON-based, 6 idiomas)
 │   └── __init__.py
 ├── gui/                    # Graphical interface
 │   ├── main_window.py     # Main application window
-│   ├── ui_main_window.py  # UI components (generated)
+│   ├── ui_main_window.py  # UI components
+│   ├── worker_thread.py   # QThread sin sys.path hacks
+│   └── language_selector.py
+├── main/                   # Entry point
+│   ├── main.py            # `python main/main.py` o `python -m main.main`
 │   └── __init__.py
-├── main/                   # Application entry point
-│   ├── main.py            # Main application launcher
-│   └── __init__.py
-├── test/                   # Test suite
-│   ├── test_jar_handler.py
-│   ├── test_theme_manager.py
-│   ├── test_language_manager.py
-│   └── __init__.py
-├── mainwindow.ui          # Qt Designer UI file
-├── requirements.txt       # Python dependencies
-└── README.md              # This file
+├── translations/           # es/en/fr/de/pt/ar.json (43 claves)
+├── tools/
+│   └── validate_translations.py  # Validador (ignora _metadata)
+├── test/                   # pytest: jar_handler, theme, language, i18n_coverage
+├── pyproject.toml          # ruff/mypy/pytest config
+├── requirements-dev.txt
+├── JarTool.spec            # portable (main/main.py, icons/jartool.ico)
+├── build_all.py            # Orquestador (no bloquea CI con --yes/JARTOOL_ASSUME_YES=1)
+├── build_linux.py / build_macos.py / build_windows.py
+└── README.md
 ```
 
 ## Installation
@@ -50,8 +53,9 @@ JarTool1/
 ### Running the Application
 
 ```bash
-cd main
-python main.py
+python main/main.py
+# o
+python -m main.main
 ```
 
 ### Features
@@ -72,39 +76,50 @@ python main.py
 - Click "Temas" to toggle between light and dark themes
 
 #### Language Switching
-- Click "Idioma" to toggle between Spanish and English
+- es / en / fr / de / pt / ar (con soporte RTL)
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.9+
 - PyQt6
-- Java Runtime Environment (for jar command)
+- JDK con comando `jar` en PATH
 
 ## Testing
 
-Run the test suite:
-
 ```bash
-cd test
-python -m unittest test_jar_handler.py
-python -m unittest test_theme_manager.py
-python -m unittest test_language_manager.py
+pip install -r requirements-dev.txt
+python -m pytest -q
+python tools/validate_translations.py
 ```
 
-Or run all tests:
+## Build (no interactivo en CI)
 
 ```bash
-cd test
-python -m unittest discover
+JARTOOL_ASSUME_YES=1 python build_all.py --no-tests
+# o
+python build_all.py --yes --no-tests
 ```
+
+## AppImage (Linux)
+
+Construido con `appimage_builder` (config en `[tool.appimage-builder]` de `pyproject.toml`):
+
+```bash
+appimage-builder build -p . \
+  --linuxdeploy <appimage_builder>/tools/linuxdeploy-x86_64.AppImage \
+  --appimagetool <appimage_builder>/tools/appimagetool-x86_64.AppImage
+# → dist/JarTool-x86_64.AppImage (~260MB, incluye PyQt6)
+```
+
+Requiere Python 3.14 del sistema anfitrión y comando `jar` (JDK) en PATH en ejecución.
 
 ## Architecture
 
 ### Core Components
 
-1. **JarHandler**: Manages JAR file operations using the system `jar` command
+1. **JarHandler**: `jar` con `shutil.which`, `timeout=120s`, `logging`, `pathlib` + `NamedTemporaryFile`
 2. **ThemeManager**: Handles light/dark theme switching with CSS stylesheets
-3. **LanguageManager**: Manages Spanish/English language switching
+3. **LanguageManager**: Único manager JSON-based (6 idiomas, fallback en→es, RTL)
 
 ### GUI Components
 
@@ -122,4 +137,4 @@ python -m unittest discover
 
 ## License
 
-This project is open source and available under the MIT License.
+MIT — ver `LICENSE`.

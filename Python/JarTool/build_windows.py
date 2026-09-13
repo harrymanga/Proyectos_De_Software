@@ -11,6 +11,20 @@ import subprocess
 from pathlib import Path
 
 
+def _ask(prompt: str, default: str = "n") -> str:
+    if os.environ.get("JARTOOL_ASSUME_YES", "").lower() in ("1", "y", "yes"):
+        return "y"
+    if "--yes" in sys.argv or "--no-input" in sys.argv:
+        return "y"
+    try:
+        if not sys.stdin.isatty():
+            return default
+    except Exception:
+        return default
+    return input(prompt)
+
+
+
 def clean_build_dirs():
     """Clean previous build directories"""
     dirs_to_clean = ['build', 'dist', '__pycache__']
@@ -176,7 +190,7 @@ def main():
     # Check PyInstaller
     if not check_pyinstaller():
         print("⚠️  PyInstaller not found")
-        response = input("Install PyInstaller? (y/n): ")
+        response = _ask("Install PyInstaller? (y/n): ")
         if response.lower() == 'y':
             install_pyinstaller()
         else:

@@ -129,22 +129,18 @@ class MatchSelectionDialog(QDialog):
     
     def show_preview(self, row):
         if row >= 0 and self.preview_checkbox.isChecked():
-            import requests
-            from io import BytesIO
-            from PyQt5.QtGui import QPixmap
-            
             try:
-                name, url = self.matches[row]
+                _, url = self.matches[row]
                 self.load_preview(url)
             except Exception as e:
                 self.preview_label.setText(f"Error: {str(e)}")
-    
+
     def load_preview(self, url):
-        import requests
         from PyQt5.QtGui import QPixmap
+        from core.http import get_session
         
         try:
-            response = requests.get(url, timeout=5)
+            response = get_session().get(url, timeout=5)
             if response.status_code == 200:
                 pixmap = QPixmap()
                 pixmap.loadFromData(response.content)

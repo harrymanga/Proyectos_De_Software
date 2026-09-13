@@ -17,6 +17,7 @@ a = Analysis(
         ('data', 'data'),
         ('locales', 'locales'),
         ('ui', 'ui'),
+        ('icons', 'icons'),
     ] + pyqt5_datas,
     hiddenimports=[
         'requests',
@@ -53,7 +54,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='data/icon.ico' if os.path.exists('data/icon.ico') else None,
+    icon='icons/retro-thumbnails.ico' if os.path.exists('icons/retro-thumbnails.ico') else None,
 )
 
 # For macOS, create an app bundle instead of a single executable
@@ -61,7 +62,7 @@ if sys.platform == 'darwin':
     app = BUNDLE(
         exe,
         name='RetroArch Thumbnails Downloader.app',
-        icon='data/icon.icns' if os.path.exists('data/icon.icns') else None,
+        icon='icons/retro-thumbnails.icns' if os.path.exists('icons/retro-thumbnails.icns') else None,
         bundle_identifier='com.retroarch.thumbnails.downloader',
         info_plist={
             'NSHighResolutionCapable': 'True',

@@ -2,77 +2,17 @@ import sys
 import os
 
 # ============================================================================
-# CRITICAL: WINDOWS LINE ENDING FIX FOR MCP (MONKEY-PATCH)
-# The MCP SDK's stdio_server uses TextIOWrapper without newline='\n', causing
-# Windows to output CRLF (\r\n) instead of LF (\n). This causes the error:
-# "invalid trailing data at the end of stream"
-# We MUST patch the MCP SDK BEFORE importing FastMCP.
+# WINDOWS LINE ENDING FIX FOR MCP (extraído a stdio_patch.py, testeable)
+# El MCP SDK usa TextIOWrapper sin newline='\n' y Windows emite CRLF.
+# Se aplica ANTES de importar FastMCP. En no-Windows es no-op.
 # ============================================================================
 
-if sys.platform == "win32":
-    import msvcrt
-    from io import TextIOWrapper
-    from contextlib import asynccontextmanager
-    
-    # Set binary mode on underlying file handles
-    msvcrt.setmode(sys.stdin.fileno(), os.O_BINARY)
-    msvcrt.setmode(sys.stdout.fileno(), os.O_BINARY)
-    
-    # Monkey-patch the MCP SDK's stdio_server to use newline='\n'
-    import mcp.server.stdio as mcp_stdio
-    import anyio
-    import anyio.lowlevel
-    from anyio.streams.memory import MemoryObjectReceiveStream, MemoryObjectSendStream
-    import mcp.types as types
-    from mcp.shared.message import SessionMessage
-    
-    @asynccontextmanager
-    async def _patched_stdio_server(
-        stdin: "anyio.AsyncFile[str] | None" = None,
-        stdout: "anyio.AsyncFile[str] | None" = None,
-    ):
-        """Patched stdio_server with proper Windows newline handling."""
-        if not stdin:
-            # Use newline='\n' to prevent CRLF translation on Windows
-            stdin = anyio.wrap_file(TextIOWrapper(sys.stdin.buffer, encoding="utf-8", newline='\n'))
-        if not stdout:
-            # Use newline='\n' to prevent CRLF translation on Windows
-            stdout = anyio.wrap_file(TextIOWrapper(sys.stdout.buffer, encoding="utf-8", newline='\n'))
+try:
+    from MCP_Server.stdio_patch import apply_stdio_patch
+except ImportError:  # ejecutado como script: python MCP_Server/mcp_cheatengine.py
+    from stdio_patch import apply_stdio_patch
 
-        read_stream_writer, read_stream = anyio.create_memory_object_stream(0)
-        write_stream, write_stream_reader = anyio.create_memory_object_stream(0)
-
-        async def stdin_reader():
-            try:
-                async with read_stream_writer:
-                    async for line in stdin:
-                        try:
-                            message = types.JSONRPCMessage.model_validate_json(line)
-                        except Exception as exc:
-                            await read_stream_writer.send(exc)
-                            continue
-                        session_message = SessionMessage(message)
-                        await read_stream_writer.send(session_message)
-            except anyio.ClosedResourceError:
-                await anyio.lowlevel.checkpoint()
-
-        async def stdout_writer():
-            try:
-                async with write_stream_reader:
-                    async for session_message in write_stream_reader:
-                        json = session_message.message.model_dump_json(by_alias=True, exclude_none=True)
-                        await stdout.write(json + "\n")
-                        await stdout.flush()
-            except anyio.ClosedResourceError:
-                await anyio.lowlevel.checkpoint()
-
-        async with anyio.create_task_group() as tg:
-            tg.start_soon(stdin_reader)
-            tg.start_soon(stdout_writer)
-            yield read_stream, write_stream
-    
-    # Apply the monkey-patch
-    mcp_stdio.stdio_server = _patched_stdio_server
+apply_stdio_patch()
 
 # ============================================================================
 # STDOUT PROTECTION FOR MCP
@@ -90,19 +30,11 @@ import json
 import socket
 import struct
 import time
-import math
 import threading
 import traceback
 
 try:
     from mcp.server.fastmcp import FastMCP
-    
-    # CRITICAL: Also patch the reference inside the fastmcp module
-    # FastMCP already imported stdio_server before our patch, so we need to update its reference too
-    if sys.platform == "win32":
-        import mcp.server.fastmcp.server as fastmcp_server
-        fastmcp_server.stdio_server = _patched_stdio_server
-        
 except ImportError as e:
     print(f"[MCP CE] Import Error: {e}", file=sys.stderr, flush=True)
     sys.exit(1)
@@ -132,65 +64,40 @@ def format_result(result):
         return json.dumps(result)
 
 # ============================================================================
-# CONFIGURATION
+# CONFIGURATION (constantes y parsers en protocol.py — fuente única)
 # ============================================================================
 
-# Bridge wire protocol endpoint
-PIPE_NAME = r"\\.\pipe\CE_MCP_Bridge_v99"
-MCP_SERVER_NAME = "cheatengine"
-MAX_RESPONSE_SIZE_BYTES = 32 * 1024 * 1024
-DEFAULT_TCP_HOST = "127.0.0.1"
-DEFAULT_TCP_PORT = 9876
-
-
-def _parse_timeout_seconds(raw_value):
-    """Parse CE_MCP_TIMEOUT seconds; <=0 disables timeout."""
-    if raw_value is None:
-        return 30.0
-    try:
-        timeout = float(raw_value)
-    except (TypeError, ValueError):
-        return 30.0
-    if not math.isfinite(timeout):
-        return 30.0
-    if timeout <= 0:
-        return None
-    return timeout
+try:
+    from MCP_Server.protocol import (
+        DEFAULT_TCP_HOST,
+        DEFAULT_TCP_PORT,
+        MCP_SERVER_NAME,
+        PIPE_NAME,
+        parse_tcp_host,
+        parse_tcp_port as _parse_tcp_port,
+        parse_timeout_seconds as _parse_timeout_seconds,
+        parse_transport as _parse_transport,
+    )
+    from MCP_Server.protocol import MAX_FRAME_SIZE_BYTES as MAX_RESPONSE_SIZE_BYTES
+except ImportError:  # ejecutado como script: python MCP_Server/mcp_cheatengine.py
+    from protocol import (
+        DEFAULT_TCP_HOST,
+        DEFAULT_TCP_PORT,
+        MCP_SERVER_NAME,
+        PIPE_NAME,
+        parse_tcp_host,
+        parse_tcp_port as _parse_tcp_port,
+        parse_timeout_seconds as _parse_timeout_seconds,
+        parse_transport as _parse_transport,
+    )
+    from protocol import MAX_FRAME_SIZE_BYTES as MAX_RESPONSE_SIZE_BYTES
 
 
 CE_MCP_TIMEOUT_SECONDS = _parse_timeout_seconds(os.environ.get("CE_MCP_TIMEOUT"))
 
 
-def _parse_transport(raw_value):
-    """Parse CE_MCP_TRANSPORT; defaults to Windows named pipe."""
-    transport = (raw_value or "pipe").strip().lower()
-    aliases = {
-        "named_pipe": "pipe",
-        "named-pipe": "pipe",
-        "np": "pipe",
-        "socket": "tcp",
-    }
-    transport = aliases.get(transport, transport)
-    if transport not in {"pipe", "tcp"}:
-        raise ValueError("CE_MCP_TRANSPORT must be 'pipe' or 'tcp'.")
-    return transport
-
-
-def _parse_tcp_port(raw_value):
-    """Parse CE_MCP_PORT as a TCP port number."""
-    if raw_value is None or str(raw_value).strip() == "":
-        return DEFAULT_TCP_PORT
-    try:
-        port = int(raw_value)
-    except (TypeError, ValueError) as exc:
-        raise ValueError("CE_MCP_PORT must be an integer TCP port.") from exc
-    if not 1 <= port <= 65535:
-        raise ValueError("CE_MCP_PORT must be between 1 and 65535.")
-    return port
-
-
 CE_MCP_TRANSPORT = _parse_transport(os.environ.get("CE_MCP_TRANSPORT"))
-CE_MCP_HOST = os.environ.get("CE_MCP_HOST", DEFAULT_TCP_HOST).strip() or DEFAULT_TCP_HOST
+CE_MCP_HOST = parse_tcp_host(os.environ.get("CE_MCP_HOST"))
 CE_MCP_PORT = _parse_tcp_port(os.environ.get("CE_MCP_PORT"))
 
 # ============================================================================

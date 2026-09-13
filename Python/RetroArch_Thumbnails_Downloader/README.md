@@ -62,10 +62,10 @@ La aplicación puede ser compilada en ejecutables para Windows, Linux y macOS us
 
 ### Build Automático (Recomendado)
 
-El script `build.py` detecta automáticamente el sistema operativo y compila la aplicación:
+El script `build_all_systems.py` detecta automáticamente el sistema operativo y compila la aplicación:
 
 ```bash
-python build.py
+python build_all_systems.py
 ```
 
 ### Build por Plataforma
@@ -98,6 +98,19 @@ Si prefieres usar PyInstaller directamente:
 pyinstaller retro_thumbnails.spec --clean --noconfirm
 ```
 
+### AppImage (Linux)
+
+Construido con `appimage_builder` (config en `[tool.appimage-builder]` de `pyproject.toml`):
+
+```bash
+appimage-builder build -p . \
+  --linuxdeploy <appimage_builder>/tools/linuxdeploy-x86_64.AppImage \
+  --appimagetool <appimage_builder>/tools/appimagetool-x86_64.AppImage
+# → dist/RetroArch_Thumbnails_Downloader-x86_64.AppImage (~93MB, incluye PyQt5)
+```
+
+Usa el Python 3.14 del anfitrión; caché y logs van a `~/.cache/retro-thumbnails/`.
+
 ## 🎮 Extensiones Soportadas
 
 Los sistemas se configuran en `data/systems.json` con soporte para extensiones agrupadas:
@@ -117,24 +130,29 @@ Los sistemas se configuran en `data/systems.json` con soporte para extensiones a
 
 ```
 retro_thumbnails/
-├── main.py                      # Aplicación principal
-├── requirements.txt             # Dependencias
+├── main.py                      # Aplicación principal (GUI + CLI)
+├── pyproject.toml               # Proyecto, ruff, mypy, pytest
+├── requirements.txt             # Deps runtime/build
+├── requirements-dev.txt         # Deps dev (pytest, ruff, mypy)
 ├── retro_thumbnails.spec        # Configuración de PyInstaller
-├── build.py                     # Script de build unificado
+├── build_all_systems.py         # Script de build unificado
+├── build_linux.sh / build_macos.sh / build_windows.bat  # Wrappers por plataforma
+├── tests/                       # Tests pytest (matcher, systems, cache, processor)
 ├── ui/                          # Componentes de interfaz
 │   ├── frmMainWindow.ui        # Diseño Qt Designer
 │   ├── frmMainWindow_ui.py     # Interfaz generada
 │   └── match_dialog.py        # Diálogo de selección de coincidencias
-├── build/                          # Scripts de build
-│   ├── build_windows.bat        # Script de build para Windows
-│   ├── build_linux.sh           # Script de build para Linux
-│   └── build_macos.sh           # Script de build para macOS
 ├── core/                        # Lógica principal
-│   ├── scanner.py              # Detección de sistemas
+│   ├── resources.py            # Rutas dev/PyInstaller
+│   ├── systems.py              # systems.json con caché
+│   ├── scanner.py              # Compat (re-exporta systems)
+│   ├── processor.py            # Lógica pura testeable
+│   ├── http.py                 # Session con Retry
 │   ├── matcher.py              # Normalización de nombres
 │   ├── matcher_search.py       # Búsqueda de coincidencias alternativas
 │   ├── downloader.py           # Descarga de imágenes
-│   ├── cache.py                # Gestión de caché
+│   ├── cache.py                # Caché local con TTL
+│   ├── logger.py               # Logging centralizado
 │   └── worker_pool.py          # Procesamiento paralelo
 ├── data/                        # Configuración
 │   └── systems.json            # Configuración de sistemas
@@ -191,4 +209,11 @@ Para agregar un nuevo idioma:
 
 ## 📄 Licencia
 
-Proyecto de código abierto para la comunidad de RetroArch.
+MIT — ver `LICENSE`.
+
+## 🧪 Dev / QA
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest -q
+```

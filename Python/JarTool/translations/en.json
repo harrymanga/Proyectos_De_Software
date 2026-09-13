@@ -11,7 +11,7 @@
   "themes": "Themes",
   "language": "Language",
   "select_jar": "Select JAR file...",
-  "select_folder": "Select folder to compress...",
+  "select_folder": "Select Folder",
   "output_dir": "Output directory...",
   "output_jar": "Output JAR file...",
   "log_placeholder": "Operations log...",
@@ -39,7 +39,7 @@
   "custom_folder_dialog": "Select folders",
   "custom_folder_instruction": "Select folders to compress (click \"Add Folder\" to add each folder):",
   "add_folder": "Add Folder",
-  "select_folder": "Select Folder",
   "browse_files": "Browse files",
-  "browse_folders": "Browse folders"
+  "browse_folders": "Browse folders",
+  "select_folder_dialog": "Select folder"
 }

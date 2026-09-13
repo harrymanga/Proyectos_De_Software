@@ -6,9 +6,9 @@ Contenido
 {
   "mcpServers": {
     "cheatengine": {
-      "command": "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/venv/bin/python",
+      "command": "<REPO>/venv/bin/python",
       "args": [
-        "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/MCP_Server/mcp_cheatengine.py"
+        "<REPO>/MCP_Server/mcp_cheatengine.py"
       ],
       "env": {
         "CE_MCP_TRANSPORT": "tcp",
@@ -30,8 +30,8 @@ Contenido
     "cheatengine": {
       "type": "local",
       "command": [
-        "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/>
-        "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/CheatEngine_MCP_Bridge/>
+        "<REPO>/venv/bin/python",
+        "<REPO>/MCP_Server/mcp_cheatengine.py"
       ],
       "enabled": true,
       "environment": {

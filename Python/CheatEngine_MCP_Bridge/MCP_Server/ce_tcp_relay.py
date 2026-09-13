@@ -28,10 +28,22 @@ except ImportError as exc:  # pragma: no cover - Windows-only helper
     raise SystemExit(1) from exc
 
 
-PIPE_NAME = r"\\.\pipe\CE_MCP_Bridge_v99"
-DEFAULT_HOST = "127.0.0.1"
-DEFAULT_PORT = 9876
-MAX_FRAME_SIZE_BYTES = 32 * 1024 * 1024
+try:
+    from MCP_Server.protocol import (
+        DEFAULT_TCP_HOST,
+        DEFAULT_TCP_PORT,
+        PIPE_NAME as PROTOCOL_PIPE_NAME,
+        is_loopback_host,
+        validate_frame_size as _validate_frame_size,
+    )
+except ImportError:  # ejecutado como script: python MCP_Server/ce_tcp_relay.py
+    from protocol import (
+        DEFAULT_TCP_HOST,
+        DEFAULT_TCP_PORT,
+        PIPE_NAME as PROTOCOL_PIPE_NAME,
+        is_loopback_host,
+        validate_frame_size as _validate_frame_size,
+    )
 
 
 def read_socket_exact(sock: socket.socket, size: int) -> Optional[bytes]:
@@ -62,12 +74,10 @@ def read_pipe_exact(handle, size: int) -> bytes:
     return b"".join(chunks)
 
 
-def validate_frame_size(size: int, direction: str) -> None:
-    if size > MAX_FRAME_SIZE_BYTES:
-        raise ConnectionError(
-            f"{direction} marco demasiado grande: {size} bytes "
-            f"(max {MAX_FRAME_SIZE_BYTES} bytes)."
-        )
+PIPE_NAME = PROTOCOL_PIPE_NAME
+DEFAULT_HOST = DEFAULT_TCP_HOST
+DEFAULT_PORT = DEFAULT_TCP_PORT
+validate_frame_size = _validate_frame_size
 
 
 def open_pipe():
@@ -161,7 +171,7 @@ def main() -> int:
         file=sys.stderr,
         flush=True,
     )
-    if args.host not in {"127.0.0.1", "localhost", "::1"}:
+    if not is_loopback_host(args.host):
         print(
             "[relay] ADVERTENCIA: el enlace sin bucle invertido expone el control de Cheat Engine a la red.",
             file=sys.stderr,

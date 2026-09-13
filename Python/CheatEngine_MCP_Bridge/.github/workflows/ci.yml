@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install 'ruff>=0.8' 'mcp>=1.0.0,<2'
+      - run: ruff check MCP_Server/protocol.py MCP_Server/stdio_patch.py MCP_Server/tests/
+      - run: ruff format --check MCP_Server/protocol.py MCP_Server/stdio_patch.py MCP_Server/tests/
+      - run: python -m compileall -q MCP_Server/protocol.py MCP_Server/stdio_patch.py MCP_Server/ce_tcp_relay.py MCP_Server/mcp_cheatengine.py MCP_Server/test_mcp.py
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends shellcheck
+      - run: shellcheck -S warning ce_bridge.sh ce_relay_start.sh ce_tcp_relay_start.sh mcp_cheatengine_start.sh
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install 'mcp>=1.0.0,<2' pytest
+      - run: python -m pytest MCP_Server/tests -q

@@ -1,22 +1,46 @@
 {
-  "timestamp": "2026-03-21 19:53:40.253496",
+  "timestamp": "2026-09-12 18:02:33.016182",
   "languages": {
-    "es": {
-      "total_keys": 42,
+    "ar": {
+      "total_keys": 43,
+      "missing_keys": [],
+      "coverage_percent": 100.0,
+      "is_valid": true
+    },
+    "de": {
+      "total_keys": 43,
       "missing_keys": [],
       "coverage_percent": 100.0,
       "is_valid": true
     },
     "en": {
-      "total_keys": 42,
+      "total_keys": 43,
+      "missing_keys": [],
+      "coverage_percent": 100.0,
+      "is_valid": true
+    },
+    "es": {
+      "total_keys": 43,
+      "missing_keys": [],
+      "coverage_percent": 100.0,
+      "is_valid": true
+    },
+    "fr": {
+      "total_keys": 43,
+      "missing_keys": [],
+      "coverage_percent": 100.0,
+      "is_valid": true
+    },
+    "pt": {
+      "total_keys": 43,
       "missing_keys": [],
       "coverage_percent": 100.0,
       "is_valid": true
     }
   },
   "summary": {
-    "total_languages": 2,
-    "total_keys": 42,
+    "total_languages": 6,
+    "total_keys": 43,
     "all_valid": true
   }
 }

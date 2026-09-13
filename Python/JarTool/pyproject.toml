@@ -1,0 +1,106 @@
+[project]
+name = "jartool"
+version = "2.0.1"
+description = "Extrae y comprime archivos JAR (PyQt6)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+dependencies = [
+    "PyQt6>=6.0,<7",
+]
+
+[project.optional-dependencies]
+build = [
+    "pyinstaller>=5.0",
+    "setuptools>=65",
+    "wheel>=0.38",
+]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.8",
+    "mypy>=1.10",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "N",
+    "UP",
+    "B",
+    "PTH",
+    "ARG",
+    "RUF",
+]
+ignore = [
+    "E501",
+]
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
+warn_unused_ignores = true
+overrides = [
+    { module = "PyQt6.*", ignore_missing_imports = true },
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "test",
+]
+addopts = "-q"
+
+[tool.coverage.run]
+source = [
+    "core",
+]
+branch = true
+
+[tool.setuptools.packages.find]
+include = [
+    "core*",
+    "gui*",
+    "main*",
+]
+
+[tool.setuptools.data-files]
+translations = [
+    "translations/*.json",
+]
+icons = [
+    "icons/jartool.png",
+    "icons/jartool.ico",
+]
+
+[tool.appimage-builder.project]
+name = "JarTool"
+version = "2.0.1"
+description = ""
+author = ""
+license = "MIT"
+build_type = "python"
+entry_point = "main.main:main"
+python_version = "3.14"
+icon = "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/JarTool/icons/jartool.png"
+
+[tool.appimage-builder.build]
+excluded_libraries = ["libpq.so.5", "libodbc.so.2", "libodbcinst.so.2", "libclntsh.so.23.1", "libmysqlclient.so.21", "libmariadb.so.3", "libmimerapi.so", "libfbclient.so.2"]
+output = "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/JarTool/dist"
+architecture = "x86_64"
+compression = "xz"
+
+[tool.appimage-builder.runtime]
+cache_dir = "/home/handerson/.cache/appimage-builder"
+
+[build-system]
+requires = [
+    "setuptools>=65",
+]
+build-backend = "setuptools.build_meta"

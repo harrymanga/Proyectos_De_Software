@@ -1,9 +1,7 @@
-# GUI Framework
-PyQt6>=6.0.0
+# Runtime (ver pyproject.toml)
+PyQt6>=6.0,<7
 
-# Packaging
+# Build (solo para generar ejecutables)
 pyinstaller>=5.0
-
-# Build tools
 setuptools>=65.0.0
 wheel>=0.38.0

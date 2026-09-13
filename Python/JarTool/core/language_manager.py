@@ -67,7 +67,8 @@ class LanguageManager:
             'add_folder': 'Agregar Carpeta',
             'select_folder_dialog': 'Seleccionar Carpeta',
             'browse_files': 'Examinar archivos',
-            'browse_folders': 'Examinar carpetas'
+            'browse_folders': 'Examinar carpetas',
+            'select_folder_dialog': 'Seleccionar carpeta'
         },
         'en': {
             'window_title': 'JarTool - Extract and compress JAR files',
@@ -112,7 +113,8 @@ class LanguageManager:
             'add_folder': 'Add Folder',
             'select_folder_dialog': 'Select Folder',
             'browse_files': 'Browse files',
-            'browse_folders': 'Browse folders'
+            'browse_folders': 'Browse folders',
+            'select_folder_dialog': 'Select folder'
         }
     }
     

@@ -1,4 +1,5 @@
-#!/bin/bash
-
-CE_MCP_TRANSPORT=tcp CE_MCP_HOST=127.0.0.1 CE_MCP_PORT=9876 \
-./venv/bin/python ./MCP_Server/mcp_cheatengine.py
+#!/usr/bin/env bash
+# Compat: servidor MCP con transporte TCP 127.0.0.1:9876.
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "$SCRIPT_DIR/ce_bridge.sh" --role server --transport tcp --host 127.0.0.1 --port 9876

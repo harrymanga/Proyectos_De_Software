@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Retro Thumbnails PRO
+GenericName=RetroArch Thumbnails Downloader
+Comment=Descarga thumbnails (boxarts, snaps, títulos) para RetroArch
+Exec="RetroArch Thumbnails Downloader"
+Icon=retro-thumbnails
+Terminal=false
+Categories=Game;Utility;
+Keywords=retroarch;thumbnails;roms;emulation;
+StartupWMClass=retro-thumbnails

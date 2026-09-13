@@ -1,12 +1,8 @@
-# GUI Framework
-PyQt5>=5.15.0
+# Runtime (pins compatibles, ver pyproject.toml)
+PyQt5>=5.15,<6
+requests>=2.28,<3
 
-# HTTP Requests
-requests>=2.28.0
-
-# Packaging
+# Build (solo para generar ejecutables)
 pyinstaller>=5.0
-
-# Build tools
 setuptools>=65.0.0
 wheel>=0.38.0

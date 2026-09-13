@@ -8,9 +8,6 @@ import tempfile
 import os
 from unittest.mock import patch, MagicMock
 
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from core.theme_manager import ThemeManager
 
 

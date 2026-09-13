@@ -7,9 +7,6 @@ import unittest
 import os
 from unittest.mock import patch, MagicMock
 
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from core.language_manager import LanguageManager
 
 
@@ -59,17 +56,19 @@ class TestLanguageManager(unittest.TestCase):
         self.assertEqual(translation, 'non_existent_key')
     
     def test_toggle_language(self):
-        """Test toggling between languages"""
+        """Test cycling through all languages"""
         original_lang = self.language_manager.current_language
-        
+        langs = self.language_manager.get_supported_languages()
+
         new_lang = self.language_manager.toggle_language()
-        
+
         self.assertNotEqual(new_lang, original_lang)
         self.assertEqual(new_lang, self.language_manager.current_language)
-        
-        # Toggle back
-        new_lang = self.language_manager.toggle_language()
-        
+
+        # Ciclar hasta volver al original (N idiomas)
+        for _ in range(len(langs) - 1):
+            new_lang = self.language_manager.toggle_language()
+
         self.assertEqual(new_lang, original_lang)
     
     def test_translations_completeness(self):

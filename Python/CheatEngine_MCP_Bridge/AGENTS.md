@@ -18,7 +18,7 @@ python MCP_Server/test_mcp.py
 
 Loading the Lua side in Cheat Engine: `File -> Execute Script -> open MCP_Server/ce_mcp_bridge.lua -> Execute`. Some CE builds expose this through `Table -> Show Cheat Table Lua Script`; in that case execute `dofile([[C:\path\to\cheatengine-mcp-bridge\MCP_Server\ce_mcp_bridge.lua]])` instead of pasting the full bridge. Success log: `[MCP v12.0.0] MCP Server Listening on: CE_MCP_Bridge_v99`. Re-executing the script auto-calls `StopMCPBridge` / `cleanupZombieState` first, so reloading is safe.
 
-There is **no build step, no linter, and no unit-test harness**. `test_mcp.py` is a single end-to-end script that talks to the live Named Pipe; running a "single test" means editing the `all_tests` dict in `test_mcp.py:main` or commenting out sections.
+Unitarios portables (sin CE): `python -m pytest MCP_Server/tests -q` (framing LE32+JSON, parsers, relay con stubs win32). Lint: `ruff check MCP_Server/protocol.py MCP_Server/stdio_patch.py MCP_Server/tests/` (+ `shellcheck` para `*.sh`). `test_mcp.py` sigue siendo solo E2E manual con pipe viva; para un "single test" edita `all_tests` en `test_mcp.py:main`.
 
 The MCP server is normally spawned by the AI client over stdio, but can be launched directly with `python MCP_Server/mcp_cheatengine.py` for debugging (it blocks waiting for stdio JSON-RPC).
 
@@ -67,7 +67,7 @@ Two files are the source of truth — there's no codegen, so you must edit both:
 
 ## Environment & safety constraints
 
-- **Windows only.** Named Pipe access via `pywin32`; no plans for cross-platform.
+- **Transportes:** pipe Windows (`pywin32`) por defecto; relay TCP (`MCP_Server/ce_tcp_relay.py` + `CE_MCP_TRANSPORT=tcp`) cuando el servidor MCP corre fuera del Windows con CE (WSL/contenedor/otro host). Constantes y parsers en `MCP_Server/protocol.py` (fuente única).
 - **Cheat Engine prerequisite**: CE → Settings → Extra → **disable "Query memory region routines"**. With it enabled, memory scans on DBVM-protected pages trigger `CLOCK_WATCHDOG_TIMEOUT` BSODs. This is documented as a hard requirement in both `README.md` and `AI_Context/AI_Guide_MCP_Server_Implementation.md`; don't weaken the assumption without testing.
 - **Pipe name** `\\.\pipe\CE_MCP_Bridge_v99` is hardcoded in both `mcp_cheatengine.py` (as `PIPE_NAME`) and `ce_mcp_bridge.lua` (as `PIPE_NAME`). Keep them in sync if you ever rename it. The `_v99` suffix is the wire-protocol version and is independent of the bridge version (`12.0.0`).
 - **Codex config:** use TOML, not JSON. Add `[mcp_servers.cheatengine]`, `command = "python"`, and `args = ['C:\path\to\MCP_Server\mcp_cheatengine.py']`. Use TOML single-quoted strings for Windows paths so backslashes are literal, then restart Codex and verify with the `ping` tool.
