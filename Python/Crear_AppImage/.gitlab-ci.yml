@@ -1,0 +1,44 @@
+stages:
+  - lint
+  - test
+
+variables:
+  QT_QPA_PLATFORM: "offscreen"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip/
+
+lint:
+  stage: lint
+  image: python:3.12-slim
+  script:
+    - pip install 'ruff>=0.5.0'
+    - ruff check src/ tests/
+    - ruff format --check src/ tests/
+
+typing:
+  stage: lint
+  image: python:3.12-slim
+  allow_failure: true # ratchet: 188 errores con strict; bajar a 0 y quitar esta línea
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends
+      gcc make cmake desktop-file-utils gnupg
+    - pip install -e ".[dev,gui]"
+  script:
+    - MYPYPATH=src PYTHONPATH=src python -m mypy -p appimage_builder
+
+test:
+  stage: test
+  parallel:
+    matrix:
+      - PYTHON: ["3.11", "3.12", "3.13"]
+  image: python:$PYTHON-slim
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends
+      gcc make cmake desktop-file-utils gnupg
+    - pip install -e ".[dev,gui,build]"
+  script:
+    - python -m pytest tests/ -m "not slow" -q --cov --cov-report=term --cov-fail-under=60

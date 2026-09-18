@@ -1,0 +1,37 @@
+# Bytecode y cachés de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribución y empaquetado (se regeneran; ver scripts/ y docs/release.md)
+dist/
+build/
+*.egg-info/
+*.egg
+
+# AppImages generados (sí se versionan los de tools/)
+*.AppImage
+!tools/*.AppImage
+
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+
+# Tests y calidad
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.tox/
+
+# Editores y SO
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Qt Designer compilados (se regeneran con pyside6-uic)
+src/appimage_builder/gui/ui/*_ui.py

@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install 'ruff>=0.5.0'
+      - run: ruff check src/ tests/
+      - run: ruff format --check src/ tests/
+
+  typing:
+    runs-on: ubuntu-latest
+    continue-on-error: true # ratchet: 188 errores con strict; bajar a 0 y quitar esta línea
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends
+          gcc make cmake desktop-file-utils gnupg
+      - run: pip install -e ".[dev,gui]"
+      - run: python -m mypy -p appimage_builder
+        env:
+          MYPYPATH: src
+          PYTHONPATH: src
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends
+          gcc make cmake desktop-file-utils gnupg
+      - run: pip install -e ".[dev,gui,build]"
+      - run: python -m pytest tests/ -m "not slow" -q --cov --cov-report=xml --cov-fail-under=60
+        env:
+          QT_QPA_PLATFORM: offscreen
+      - uses: codecov/codecov-action@v4
+        if: matrix.python-version == '3.12'
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false

@@ -1,0 +1,14 @@
+site_name: appimage-builder
+site_description: Automatización de creación de paquetes AppImage con CLI y GUI
+theme:
+  name: material
+nav:
+  - Inicio: README.md
+  - Guía de uso: docs/usage.md
+  - Releases: docs/release.md
+  - Changelog: CHANGELOG.md
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
