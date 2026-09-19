@@ -16,7 +16,13 @@ Descargador de thumbnails para RetroArch con interfaz gráfica, soporte multi-id
 - 💾 **Selección de ruta personalizada**: Guarda thumbnails en cualquier ubicación
 - ⚡ **Procesamiento paralelo**: Descargas concurrentes para mayor velocidad
 
-## 📦 Instalación
+## 📦 Instalación y ejecución (recomendado)
+
+```bash
+./run.sh        # crea .venv, instala dependencias y ejecuta (Linux/macOS)
+```
+
+En Windows: `run.bat`. Equivalente manual:
 
 ```bash
 # Instalar dependencias

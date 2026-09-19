@@ -24,6 +24,13 @@ powershell -ExecutionPolicy Bypass -File scripts\build-windows.ps1
 ## Uso rápido
 
 ```bash
+./run.sh --help   # crea .venv, instala el proyecto y muestra la ayuda
+```
+
+En Windows: `run.bat --help`. Equivalente manual (con el proyecto
+instalado con `pip install -e .`):
+
+```bash
 # CLI
 cd tu-proyecto
 appimage-builder init                         # detecta y escribe [tool.appimage-builder]

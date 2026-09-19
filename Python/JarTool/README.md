@@ -138,3 +138,11 @@ Requiere Python 3.14 del sistema anfitrión y comando `jar` (JDK) en PATH en eje
 ## License
 
 MIT — ver `LICENSE`.
+
+## Ejecución
+
+```bash
+./run.sh        # crea .venv, instala el proyecto y ejecuta (Linux/macOS)
+```
+
+En Windows: `run.bat`.
