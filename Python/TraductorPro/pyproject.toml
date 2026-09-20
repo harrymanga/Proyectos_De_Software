@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "traductor-pro"
+version = "1.0.0"
+description = "Aplicación multiplataforma de traducción de archivos (CFG, LANG, TXT) con múltiples motores"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Handerson"}
+]
+dependencies = [
+    "PyQt5>=5.15",
+    "googletrans>=4.0.0-rc1",
+    "deepl>=1.16.0",
+    "openai>=1.30.0",
+    "keyring>=25.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-cov>=5.0",
+    "pytest-qt>=4.4",
+    "flake8>=7.0",
+    "mypy>=1.10",
+    "black>=24.4",
+    "isort>=5.13",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+traductor_pro = ["ui/*.ui"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.appimage-builder]
+project = { name = "TraductorPro", version = "1.0.0", description = "Traductor multiplataforma de archivos (cfg/lang/txt/properties/json)", build_type = "python", entry_point = "traductor_pro.app:main", python_version = "3.11", icon = "icons/traductorpro.png" }
+build = { output = "dist", architecture = "x86_64", compression = "xz", prune_paths = ["usr/lib/python3*/site-packages/PyQt5/Qt5/qml", "usr/lib/python3*/site-packages/PyQt5/QtWebEngine*", "usr/lib/python3*/site-packages/PyQt5/Qt5/lib/libQt5WebEngine*", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/webview", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/sqldrivers", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/sensorgestures", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/sceneparsers", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/sensors", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/renderplugins", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/renderers", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/imageformats/libqpdf.so", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/geoservices", "usr/lib/python3*/site-packages/PyQt5/Qt5/plugins/geometryloaders"] }
+runtime = { cache_dir = "~/.cache/appimage-builder" }

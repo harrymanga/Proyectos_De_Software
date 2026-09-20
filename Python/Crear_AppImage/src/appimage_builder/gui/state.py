@@ -47,6 +47,7 @@ class WizardState:
     # Precargadas desde [tool.appimage-builder] del proyecto (ver detect()).
     # La GUI no las edita: viajan tal cual al build para no perder ajustes CLI.
     excluded_libraries: list[str] = field(default_factory=list)
+    prune_paths: list[str] = field(default_factory=list)
 
     detected_type: BuildType | None = None
     detected_entry: str = ""
@@ -105,6 +106,9 @@ class WizardState:
             excluded = build.get("excluded_libraries", [])
             if isinstance(excluded, list):
                 self.excluded_libraries = [str(lib) for lib in excluded if str(lib).strip()]
+            pruned = build.get("prune_paths", [])
+            if isinstance(pruned, list):
+                self.prune_paths = [str(p) for p in pruned if str(p).strip()]
 
     def output_dir(self) -> Path:
         if self.output.strip():
@@ -138,6 +142,7 @@ class WizardState:
             sign_key=self.sign_key.strip() or None,
             bundle_tree=self.bundle_tree,
             excluded_libraries=list(self.excluded_libraries),
+            prune_paths=list(self.prune_paths),
         )
         runtime = RuntimeConfig(
             no_fuse=self.no_fuse,

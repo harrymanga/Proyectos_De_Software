@@ -117,6 +117,13 @@ class BuildConfig(BaseModel):
     excluded_libraries: Annotated[
         list[str], Field(default_factory=list, description="Librerías a excluir en linuxdeploy")
     ]
+    prune_paths: Annotated[
+        list[str],
+        Field(
+            default_factory=list,
+            description="Rutas (glob, relativas al AppDir) a podar antes de linuxdeploy",
+        ),
+    ]
     bundle_tree: Annotated[
         bool,
         Field(

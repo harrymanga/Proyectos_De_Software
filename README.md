@@ -14,6 +14,11 @@ Descargador de miniaturas para RetroArch.
 - **Tecnologías**: PyQt5, requests
 - **Características**: Descarga automática, multi-sistema
 
+### TraductorPro
+Traductor multiplataforma de archivos (cfg/lang/txt/properties/json) con GUI Qt.
+- **Tecnologías**: PyQt5, DeepL, OpenAI, googletrans
+- **Características**: es/en + tema oscuro, placeholders, caché, 68 tests, icono AppImage-ready
+
 ## Estructura
 
 Cada proyecto incluye:

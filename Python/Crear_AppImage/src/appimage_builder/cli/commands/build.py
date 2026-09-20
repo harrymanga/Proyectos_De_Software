@@ -58,6 +58,9 @@ def build(
     exclude_library: list[str] | None = typer.Option(
         None, "--exclude-library", help="Librería a excluir en linuxdeploy (repetible)."
     ),
+    prune_path: list[str] | None = typer.Option(
+        None, "--prune-path", help="Ruta glob (relativa al AppDir) a podar antes de linuxdeploy (repetible)."
+    ),
     linuxdeploy: Path | None = typer.Option(
         None, "--linuxdeploy", help="Binario local de linuxdeploy (sin descarga)."
     ),
@@ -94,6 +97,7 @@ def build(
                 "sign": sign,
                 "sign_key": sign_key,
                 "excluded_libraries": list(exclude_library or []),
+                "prune_paths": list(prune_path or []),
                 "linuxdeploy_path": linuxdeploy,
                 "appimagetool_path": appimagetool,
                 "bundle_tree": bundle_tree,

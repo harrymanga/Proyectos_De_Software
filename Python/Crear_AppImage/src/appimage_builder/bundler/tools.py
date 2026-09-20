@@ -19,6 +19,37 @@ from appimage_builder.core.models import BuildConfig, BuildProgress, ProjectConf
 ProgressCb = Callable[[BuildProgress], Awaitable[None]] | None
 
 
+def prune_appdir(appdir: Path, patterns: list[str]) -> dict[str, int]:
+    """Poda rutas del AppDir antes de linuxdeploy (ej: árbol QML no usado).
+
+    Cada patrón es un glob relativo al AppDir (ej:
+    "usr/lib/python3*/site-packages/PyQt5/Qt5/qml"). Por seguridad solo
+    actúa dentro del AppDir. Devuelve {"files": n, "dirs": n}.
+    """
+    removed = {"files": 0, "dirs": 0}
+    base = appdir.resolve()
+    for pattern in patterns:
+        if not pattern or pattern.strip() in ("", ".", "/"):
+            continue
+        for match in sorted(base.glob(pattern.strip())):
+            try:
+                target = match.resolve()
+            except OSError:
+                continue
+            if target != base and base not in target.parents:
+                continue
+            try:
+                if target.is_symlink() or target.is_file():
+                    target.unlink()
+                    removed["files"] += 1
+                elif target.is_dir():
+                    shutil.rmtree(target)
+                    removed["dirs"] += 1
+            except OSError:
+                continue
+    return removed
+
+
 async def _report(
     progress: ProgressCb, stage: str, frac: float, message: str, details: str = ""
 ) -> None:

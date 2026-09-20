@@ -61,6 +61,7 @@ class CLISettings(BaseSettings):
     pre_package_hook: Path | None = None
     post_install_hook: Path | None = None
     excluded_libraries: list[str] = Field(default_factory=list)
+    prune_paths: list[str] = Field(default_factory=list)
     bundle_tree: bool | None = None
 
     # Runtime overrides
@@ -293,6 +294,7 @@ class ConfigManager:
             "pre_package_hook": "pre_package_hook",
             "post_install_hook": "post_install_hook",
             "excluded_libraries": "excluded_libraries",
+            "prune_paths": "prune_paths",
             "bundle_tree": "bundle_tree",
         }
         for cli_attr, model_attr in build_fields.items():

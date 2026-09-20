@@ -294,6 +294,18 @@ class BuildService:
             "Ejecutando linuxdeploy...",
         )
 
+        prune_patterns = list(getattr(self.build_config, "prune_paths", []) or [])
+        if prune_patterns:
+            from appimage_builder.bundler.tools import prune_appdir
+
+            removed = await asyncio.to_thread(prune_appdir, self.appdir, prune_patterns)
+            await self._report(
+                progress_callback,
+                BuildStage.RUNNING_LINUXDEPLOY,
+                0.25,
+                f"AppDir podado: {removed['dirs']} dirs, {removed['files']} archivos",
+            )
+
         async def forward(update: BuildProgress) -> None:
             await self._report(
                 progress_callback,

@@ -58,6 +58,19 @@ excluye librerías del bundling de linuxdeploy (repetible):
 appimage-builder build --exclude-library libpq.so.5 --exclude-library libodbc.so.2
 ```
 
+Si el fallo es un árbol entero inútil (ej: `PyQt5/Qt5/qml` en apps solo-widgets,
+cuyos plugins Qt3D/QML ni siquiera existen en los wheels de pip), pódalo del
+AppDir **antes** de linuxdeploy (repetible, globs relativos al AppDir):
+
+```bash
+appimage-builder build --prune-path "usr/lib/python3*/site-packages/PyQt5/Qt5/qml"
+```
+
+```toml
+[tool.appimage-builder]
+build = { prune_paths = ["usr/lib/python3*/site-packages/PyQt5/Qt5/qml"] }
+```
+
 Apps portables precompiladas (carpeta con binarios + datos relativos, ej:
 juegos): empaqueta el árbol completo y un shim en `usr/bin` que conserva
 `$0` para los `cd` del lanzador:
