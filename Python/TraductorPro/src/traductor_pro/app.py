@@ -19,7 +19,7 @@ from traductor_pro.infrastructure.placeholder.placeholder_protector import Regex
 from traductor_pro.infrastructure.reports.text_report import TextReportGenerator
 from traductor_pro.infrastructure.security.key_manager import KeyringKeyManager
 from traductor_pro.infrastructure.translators.translator_factory import TranslatorFactory
-from traductor_pro.presentation.main_window import MainWindowController
+from traductor_pro.gui.main_window import MainWindowController
 
 
 def setup_logging() -> None:

@@ -179,14 +179,14 @@ class MainWindowController(QMainWindow):
         ui_path = ""
         try:
             from importlib.resources import files
-            candidate = files("traductor_pro") / "ui" / "main_window.ui"
+            candidate = files("traductor_pro") / "gui" / "main_window.ui"
             if candidate.is_file():
                 ui_path = str(candidate)
         except Exception:
             ui_path = ""
         if not ui_path:
-            ui_path = os.path.join(os.path.dirname(__file__), "..", "ui", "main_window.ui")
-            ui_path = os.path.abspath(ui_path)
+            ui_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                   "main_window.ui")
 
         if not os.path.isfile(ui_path):
             alt_path = os.path.join(os.path.dirname(sys.argv[0]), "ui", "main_window.ui")

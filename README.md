@@ -19,6 +19,13 @@ Traductor multiplataforma de archivos (cfg/lang/txt/properties/json) con GUI Qt.
 - **Tecnologías**: PyQt5, DeepL, OpenAI, googletrans
 - **Características**: es/en + tema oscuro, placeholders, caché, 68 tests, icono AppImage-ready
 
+### Buscar_Magnet / Buscar_Zip
+Scraping de enlaces magnet y ZIPs de ROMs (pendiente de consolidación común).
+- **Tecnologías**: requests, bs4, aiohttp, libtorrent
+
+### Extraer_Strings_De_Archivos / Extraer_Texto
+Extracción de textos traducibles desde código (pendiente de consolidación con Traducciones).
+
 ## Estructura
 
 Cada proyecto incluye:

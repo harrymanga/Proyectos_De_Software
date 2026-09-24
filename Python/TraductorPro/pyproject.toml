@@ -35,7 +35,7 @@ dev = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-traductor_pro = ["ui/*.ui"]
+traductor_pro = ["gui/*.ui"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

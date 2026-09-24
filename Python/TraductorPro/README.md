@@ -103,11 +103,11 @@ black --check src/ tests/
 
 ### Editar la UI
 
-Abrir `src/traductor_pro/ui/main_window.ui` con Qt Designer (vive dentro del
-paquete para que viaje en el AppImage):
+Abrir `src/traductor_pro/gui/main_window.ui` con Qt Designer (vive junto al
+código GUI para que viaje en el AppImage):
 
 ```bash
-designer src/traductor_pro/ui/main_window.ui
+designer src/traductor_pro/gui/main_window.ui
 ```
 
 ## Licencia

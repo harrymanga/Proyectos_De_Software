@@ -1,0 +1,5 @@
+requests
+beautifulsoup4
+aiohttp
+# libtorrent es OPCIONAL (solo para Verificar): sin wheel para Python nuevos.
+# Opciones: sudo apt install python3-libtorrent  |  pip install libtorrent==2.*
