@@ -35,7 +35,9 @@ def extraer_strings_y_variables(path_del_script):
 
     return nombre_archivo_json
 
-# Ejemplo de uso
-ruta_script = 'C:\\Users\\Administrador\\Desktop\\T1.P1.py'
-nombre_json = extraer_strings_y_variables(ruta_script)
-print(f"Los datos han sido guardados en {nombre_json}")
+# Ejemplo de uso (ruta relativa al proyecto; sobrescribible con APPIMAGE_BUILDER_* si se requiere absoluto)
+if __name__ == "__main__":
+    from pathlib import Path
+    ruta_script = str(Path(__file__).resolve().parents[1] / "data" / "T1.P1.py")
+    nombre_json = extraer_strings_y_variables(ruta_script)
+    print(f"Los datos han sido guardados en {nombre_json}")

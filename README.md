@@ -23,8 +23,23 @@ Traductor multiplataforma de archivos (cfg/lang/txt/properties/json) con GUI Qt.
 Scraping de enlaces magnet y ZIPs de ROMs (pendiente de consolidación común).
 - **Tecnologías**: requests, bs4, aiohttp, libtorrent
 
+### CheatEngine_MCP_Bridge
+Puente MCP para Cheat Engine (scripts `ce_bridge.sh`, `mcp_cheatengine_start.sh`, `ce_relay/tcp_relay`; ver su `AGENTS.md`/`CLAUDE.md`).
+
+### Crear_AppImage
+Herramienta automatizada CLI+GUI para crear AppImages (canónica; `run.sh`, `docs/`, `scripts/`).
+- Ver `Python/Crear_AppImage/README.md`. Es la recomendada por `Crear_AppImage/Plantillas/`.
+
 ### Extraer_Strings_De_Archivos / Extraer_Texto
 Extracción de textos traducibles desde código (pendiente de consolidación con Traducciones).
+
+## Proyectos C++ / Godot
+
+### GDRE_Localizacion_Temas
+Overlay de español (+ futuros idiomas) y temas claro/oscuro para Godot RE Tools v2.6.4, sin modificar el upstream.
+- **Ubicación**: `C++/Godot/GDRE_Localizacion_Temas/`
+- **Upstream sibling**: `C++/Godot/GDRE_tools-v2.6.4-linux/` (binarios + `PCK/` exportado; la ruta fuente antigua ya no existe; ver `UPSTREAM.md`)
+- **Características**: extractor de cadenas (182 UI), generador de tema claro, scripts de aplicación y verificación de actualizaciones
 
 ## Estructura
 

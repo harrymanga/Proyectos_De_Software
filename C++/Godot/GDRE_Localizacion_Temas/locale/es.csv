@@ -1,0 +1,200 @@
+clave,fuente_en,es
+ui_0001,--- Please select bytecode version ---,
+ui_0002,"0 (Godot 1.x, 2.x)",
+ui_0003,1 (Godot 3.x),
+ui_0004,2 (Godot 4.0-4.4),
+ui_0005,3 (Godot 4.5-4.6),
+ui_0006,4 (Godot 4.7+),
+ui_0007,<NONE>,
+ui_0008,<info text>,
+ui_0009,About Godot RE Tools...,
+ui_0010,Add Files...,Agregar archivos...
+ui_0011,Add PCK(s),
+ui_0012,Add Translation...,Agregar traducción...
+ui_0013,C# Assembly,Ensamblaje C#
+ui_0014,C# Assembly ⚠️,Ensamblaje C# ⚠️
+ui_0015,CSV File...,Archivo CSV...
+ui_0016,Cancel,Cancelar
+ui_0017,Certain assets have been written to the .assets directory!,¡Ciertos activos se han escrito en el directorio .assets!
+ui_0018,Check,Marcar
+ui_0019,Check all,Marcar todo
+ui_0020,Checks all shown files,Marcar todos los archivos mostrados
+ui_0021,Clear,Limpiar
+ui_0022,Clear files,Limpiar archivos
+ui_0023,Compile .GD script files...,Compilar archivos de script .GD...
+ui_0024,Compile GDScript,Compilar GDScript
+ui_0025,Convert MP3 Streams to MP3...,Convertir flujos MP3 a MP3...
+ui_0026,Convert OGG Samples to OGG...,Convertir muestras OGG a OGG...
+ui_0027,Convert WAV Samples to WAV...,
+ui_0028,Convert binary resources to text...,Convertir recursos binarios a texto...
+ui_0029,Convert stream textures to PNG...,Convertir texturas de flujo a PNG...
+ui_0030,Convert text resources to binary...,Convertir recursos de texto a binarios...
+ui_0031,Could not recover files:\n,
+ui_0032,Create New Pck...,Crear nuevo PCK...
+ui_0033,Create PCK archive from folder...,
+ui_0034,Create patch PCK,
+ui_0035,Decompile .GDC/.GDE script files...,Descompilar archivos de script .GDC/.GDE...
+ui_0036,Decompile GDScript,Descompilar GDScript
+ui_0037,Destination folder:,Carpeta de destino:
+ui_0038,Directory:,Directorio:
+ui_0039,Do more stuff,hacer más cosas
+ui_0040,Do other stuff,hacer otras cosas
+ui_0041,Do stuff,
+ui_0042,Do you want to discard current changes?,¿Quieres descartar los cambios actuales?
+ui_0043,Don't ask again,No preguntar de nuevo
+ui_0044,Embed,Incrustar
+ui_0045,Embed PCK:,
+ui_0046,Embed into EXE,Incrustar en EXE
+ui_0047,Encrypt Directory,Cifrar directorio
+ui_0048,Encryption:,Cifrado:
+ui_0049,Error creating PCK file!,
+ui_0050,Error: You can only use this to patch PCKs or embedded PCKs,
+ui_0051,Error: failed to open,Error: no se pudo abrir
+ui_0052,Error: selected PCK(s) are already loaded,
+ui_0053,Exclude Filters,Excluir filtros
+ui_0054,Export Settings...,Configuración de exportación...
+ui_0055,Exporter Settings,Configuración del exportador
+ui_0056,Extract,Extraer
+ui_0057,Extract Only,Extraer solo
+ui_0058,Extract to...,Extraer a...
+ui_0059,Failed to add files to PCK:\n,
+ui_0060,Failed to add files to patch PCK:\n,
+ui_0061,Failed to compile file:,No se pudo compilar el archivo:
+ui_0062,Failed to convert files:\n,
+ui_0063,Failed to create decompiler for version:,No se pudo crear el descompilador para la versión:
+ui_0064,Failed to decompile file:,No se pudo descompilar el archivo:
+ui_0065,Failed to finish patch PCK:\n,
+ui_0066,Failed to load import files:\n,
+ui_0067,Failed to load project:\n,
+ui_0068,Failed to open,No se pudo abrir
+ui_0069,Failed to open file for writing:,No se pudo abrir el archivo para escribir:
+ui_0070,Failed to patch project config:\n,
+ui_0071,Failed to patch translation,No se pudo parchear la traducción
+ui_0072,Failed to read file:,No se pudo leer el archivo:
+ui_0073,Failed to remove existing PCK:\n,
+ui_0074,Failed to write PCK:\n,
+ui_0075,File does not exist,El archivo no existe
+ui_0076,"File is NativeAOT assembly, not supported by GDRE Tools",
+ui_0077,File is not a valid .NET IL assembly (corrupt?),El archivo no es un ensamblado .NET IL válido (¿dañado?)
+ui_0078,Files to patch...,
+ui_0079,Files:,Archivos:
+ui_0080,Force Enable All Versions,Forzar habilitación de todas las versiones
+ui_0081,Full Recovery,Recuperación completa
+ui_0082,"GDExtension plugins have been detected.
+Do you want to automatically detect and download?","Se detectaron plugins GDExtension.
+¿Detectar y descargar automáticamente?"
+ui_0083,GDScript,
+ui_0084,GLTF,
+ui_0085,General,
+ui_0086,Hide Preview,Ocultar vista previa
+ui_0087,Hide Resource Preview,Ocultar vista previa de recursos
+ui_0088,Important: Legal Notice,
+ui_0089,Include Filters:,Incluir filtros:
+ui_0090,Invalid CSV file:\n,
+ui_0091,Invalid Selection!!,¡¡Selección no válida!!
+ui_0092,Invalid encryption script!\n,
+ui_0093,Invalid key!\nKey must be a hex string with,
+ui_0094,Load a pack first!,
+ui_0095,Locales to patch...,Locales para parchear...
+ui_0096,"Log file written to <LOG_FILE_URI>
+[b]Please include this file when reporting an issue![/b]",
+ui_0097,Map selected to Folder...,Asignar selección a carpeta...
+ui_0098,"Multiple PCK files found, cannot patch",
+ui_0099,"No PCK files found, cannot patch",
+ui_0100,No destination folder selected,No se ha seleccionado ninguna carpeta de destino
+ui_0101,No files selected,No hay archivos seleccionados
+ui_0102,Open File(s),Abrir archivo(s)
+ui_0103,Open Folder,Abrir carpeta
+ui_0104,Open a Directory,Abrir un directorio
+ui_0105,Open a File,Abrir un archivo
+ui_0106,Open a File or Directory,Abrir un archivo o directorio
+ui_0107,Optional decryption script for games with custom encryption,Script de descifrado opcional para juegos con cifrado personalizado
+ui_0108,Output files to directory,Exportar archivos al directorio
+ui_0109,PCK,
+ui_0110,PCK Files...,
+ui_0111,PCK patching complete,
+ui_0112,PCK version,
+ui_0113,Patch PCK,
+ui_0114,Patch PCK archive...,
+ui_0115,Patch PCK created successfully,
+ui_0116,Patch PCK directly,
+ui_0117,Patch Translation...,Parchear traducción...
+ui_0118,Please add at least one translation,Por favor agregue al menos una traducción
+ui_0119,Please load a project first,Por favor cargue un proyecto primero
+ui_0120,Please select a CSV file,Por favor seleccione un archivo CSV
+ui_0121,Please select a translation,Por favor seleccione una traducción
+ui_0122,Please select at least one locale,Por favor seleccione al menos un locale
+ui_0123,Project Recovery,Recuperación del Proyecto
+ui_0124,Project to Patch...,Proyecto para parchear...
+ui_0125,Quit,Salir
+ui_0126,RE Tools,Herramientas RE
+ui_0127,Recover Project...,Recuperar proyecto...
+ui_0128,Recovery canceled!,¡Recuperación cancelada!
+ui_0129,Remove Files,Eliminar archivos
+ui_0130,Report a bug...,Informar un error...
+ui_0131,Reported Godot engine version (<minor>.<major>.<patch>),
+ui_0132,Reset to Defaults,Restablecer los valores predeterminados
+ui_0133,Resources,Recursos
+ui_0134,"Sampling Rate: 48000
+Loop: No","Tasa de muestreo: 48000
+Bucle: No"
+ui_0135,Save,Guardar
+ui_0136,Save PCK...,
+ui_0137,Scene Exporter,Exportador de escenas
+ui_0138,Script Files,Archivos de script
+ui_0139,Script bytecode version:,Versión del código de bytes del script:
+ui_0140,Select,Seleccionar
+ui_0141,Select %s...,
+ui_0142,Select Action...,Seleccione Acción...
+ui_0143,Select Files...,Seleccionar archivos...
+ui_0144,Select Mapping,Seleccionar mapeo
+ui_0145,Select Output Directory,Seleccionar directorio de salida
+ui_0146,Select Translation to patch,Seleccione Traducción para parchear
+ui_0147,"Select \""Relative From...\"" Mapping",
+ui_0148,"Select \""Relative To...\"" Mapping",
+ui_0149,Select items to map!,¡Seleccione elementos para asignar!
+ui_0150,Select the C# assembly associated with this project...,Seleccione el ensamblado de C# asociado con este proyecto...
+ui_0151,Set Custom Decryption Script...,Establecer script de descifrado personalizado...
+ui_0152,Set Encryption Key,Establecer clave de cifrado
+ui_0153,Set Encryption Key (64 char hex string...),Establecer clave de cifrado (cadena hexadecimal de 64 caracteres...)
+ui_0154,Set encryption key...,Establecer clave de cifrado...
+ui_0155,Settings,Ajustes
+ui_0156,Settings...,Ajustes...
+ui_0157,Show Preview...,Mostrar vista previa...
+ui_0158,Show Resource Preview...,Mostrar vista previa de recursos...
+ui_0159,Switch to Scene View,Cambiar a vista de escena
+ui_0160,Total files:,Archivos totales:
+ui_0161,Translation patched successfully,Traducción parcheada exitosamente
+ui_0162,Translations to Patch,Traducciones para parchear
+ui_0163,Uncheck,Desmarcar
+ui_0164,Uncheck all,Desmarcar todo
+ui_0165,Unchecks all shown files,Desmarca todos los archivos mostrados
+ui_0166,Validation failed,La validación falló
+ui_0167,Version:,Versión:
+ui_0168,Watermark text,Texto de marca de agua
+ui_0169,You can only patch one PCK at a time,
+ui_0170,[b]Important Notes[/b],[b]Notas importantes[/b]
+ui_0171,[b]Info:[/b],[b]Información:[/b]
+ui_0172,"[b]Path:[/b]
+[b]Type:[/b]
+[b]Format:[/b]","[b]Ruta:[/b]
+[b]Tipo:[/b]
+[b]Formato:[/b]"
+ui_0173,[b]Totals[/b],[b]Totales[/b]
+ui_0174,"[b]Use Godot editor version <GODOT_VER> to edit the project.[/b]
+<CUSTOM_VER_NOTE>",
+ui_0175,[b]Version:[/b],[b]Versión:[/b]
+ui_0176,[color=#FF0000]ERROR:[/color],
+ui_0177,[color=#FF0000]ERROR[/color],
+ui_0178,"\""Relative from...\"" mapping",
+ui_0179,"\""Relative to...\"" mapping",
+ui_0180,en_us,
+ui_0181,Create PCK archive from folder... ,Crear archivo PCK desde carpeta...
+ui_0182,Convert textures to PNG...,Convertir texturas a PNG...
+ui_0183,Convert OGG streams to OGG...,Convertir flujos OGG a OGG...
+ui_0184,Convert MP3 streams to MP3...,Convertir flujos MP3 a MP3...
+ui_0185,Convert samples to WAV...,Convertir muestras a WAV...
+ui_0186,OK,Aceptar
+ui_0187,Language,Idioma
+ui_0188,Theme: Light,Tema: Claro
+ui_0189,Theme: Dark,Tema: Oscuro

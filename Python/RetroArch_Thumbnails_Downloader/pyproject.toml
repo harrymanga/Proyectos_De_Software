@@ -101,16 +101,20 @@ license = "MIT"
 build_type = "python"
 entry_point = "main:main"
 python_version = "3.14"
-icon = "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/RetroArch_Thumbnails_Downloader/icons/retro-thumbnails.png"
+icon = "icons/retro-thumbnails.png"
 
 [tool.appimage-builder.build]
 excluded_libraries = ["libpq.so.5", "libodbc.so.2", "libodbcinst.so.2", "libclntsh.so.23.1", "libmysqlclient.so.21", "libmariadb.so.3", "libmimerapi.so", "libfbclient.so.2", "libQt53DAnimation.so.5", "libQt53DCore.so.5", "libQt53DExtras.so.5", "libQt53DInput.so.5", "libQt53DLogic.so.5", "libQt53DRender.so.5", "libQt53DQuick.so.5", "libQt53DQuickAnimation.so.5", "libQt53DQuickExtras.so.5", "libQt53DQuickInput.so.5", "libQt53DQuickRender.so.5", "libQt53DQuickScene2D.so.5", "libQt5Gamepad.so.5", "libQt5Bodymovin.so.5", "libQt5Pdf.so.5", "libQt5PdfWidgets.so.5", "libQt5WebEngine.so.5", "libQt5WebEngineCore.so.5"]
-output = "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/GitHub/Proyectos_De_Software/Python/RetroArch_Thumbnails_Downloader/dist"
+# Ruta de salida portable. Sobrescribible con:
+#   APPIMAGE_BUILDER_BUILD_OUTPUT=/ruta/abs/dist
+output = "dist"
 architecture = "x86_64"
 compression = "xz"
 
 [tool.appimage-builder.runtime]
-cache_dir = "/home/handerson/.cache/appimage-builder"
+# Cache portable (~/.cache/appimage-builder por defecto en el modelo).
+# Sobrescribible con: APPIMAGE_BUILDER_RUNTIME_CACHE_DIR=/ruta/abs/cache
+cache_dir = "~/.cache/appimage-builder"
 
 [build-system]
 requires = [

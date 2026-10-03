@@ -1,0 +1,517 @@
+clave,fuente_en,es
+ui_0001,--- Please select bytecode version ---,"--- Por favor, seleccione la versión del bytecode ---"
+ui_0002,"0 (Godot 1.x, 2.x)","0 (Godot 1.x, 2.x)"
+ui_0003,1 (Godot 3.x),1 (Godot 3.x)
+ui_0004,2 (Godot 4.0-4.4),2 (Godot 4.0-4.4)
+ui_0005,3 (Godot 4.5-4.6),3 (Godot 4.5-4.6)
+ui_0006,4 (Godot 4.7+),4 (Godot 4.7+)
+ui_0007,<NONE>,<NINGUNO>
+ui_0008,<info text>,<texto informativo>
+ui_0009,About Godot RE Tools...,Acerca de Godot RE Tools...
+ui_0010,Add Files...,Agregar archivos...
+ui_0011,Add PCK(s),Agregar PCK(s)
+ui_0012,Add Translation...,Agregar traducción...
+ui_0013,C# Assembly,Ensamblaje C#
+ui_0014,C# Assembly ⚠️,Ensamblaje C# ⚠️
+ui_0015,CSV File...,Archivo CSV...
+ui_0016,Cancel,Cancelar
+ui_0017,Certain assets have been written to the .assets directory!,¡Ciertos activos se han escrito en el directorio .assets!
+ui_0018,Check,Marcar
+ui_0019,Check all,Marcar todo
+ui_0020,Checks all shown files,Marcar todos los archivos mostrados
+ui_0021,Clear,Limpiar
+ui_0022,Clear files,Limpiar archivos
+ui_0023,Compile .GD script files...,Compilar archivos de script .GD...
+ui_0024,Compile GDScript,Compilar GDScript
+ui_0025,Convert MP3 Streams to MP3...,Convertir flujos MP3 a MP3...
+ui_0026,Convert OGG Samples to OGG...,Convertir muestras OGG a OGG...
+ui_0027,Convert WAV Samples to WAV...,Convertir muestras WAV a WAV...
+ui_0028,Convert binary resources to text...,Convertir recursos binarios a texto...
+ui_0029,Convert stream textures to PNG...,Convertir texturas de flujo a PNG...
+ui_0030,Convert text resources to binary...,Convertir recursos de texto a binarios...
+ui_0031,Could not recover files:\n,No se pudieron recuperar los archivos:\n
+ui_0032,Create New Pck...,Crear nuevo PCK...
+ui_0033,Create PCK archive from folder...,Crear archivo PCK a partir de la carpeta...
+ui_0034,Create patch PCK,Crear parche PCK
+ui_0035,Decompile .GDC/.GDE script files...,Descompilar archivos de script .GDC/.GDE...
+ui_0036,Decompile GDScript,Descompilar GDScript
+ui_0037,Destination folder:,Carpeta de destino:
+ui_0038,Directory:,Directorio:
+ui_0039,Do more stuff,Hacer más cosas
+ui_0040,Do other stuff,Hacer otras cosas
+ui_0041,Do stuff,Hacer cosas
+ui_0042,Do you want to discard current changes?,¿Quieres descartar los cambios actuales?
+ui_0043,Don't ask again,No preguntar de nuevo
+ui_0044,Embed,Incrustar
+ui_0045,Embed PCK:,Incrustar PCK:
+ui_0046,Embed into EXE,Incrustar en EXE
+ui_0047,Encrypt Directory,Cifrar directorio
+ui_0048,Encryption:,Cifrado:
+ui_0049,Error creating PCK file!,¡Error al crear el archivo PCK!
+ui_0050,Error: You can only use this to patch PCKs or embedded PCKs,Error: Solo puedes usar esto para aplicar parches a PACKs o PACKs incrustados.
+ui_0051,Error: failed to open,Error: no se pudo abrir
+ui_0052,Error: selected PCK(s) are already loaded,Error: los PCK(s) seleccionados ya están cargados
+ui_0053,Exclude Filters,Excluir filtros
+ui_0054,Export Settings...,Configuración de exportación...
+ui_0055,Exporter Settings,Configuración del exportador
+ui_0056,Extract,Extraer
+ui_0057,Extract Only,Extraer solo
+ui_0058,Extract to...,Extraer a...
+ui_0059,Failed to add files to PCK:\n,No se pudieron añadir archivos al PCK:\n
+ui_0060,Failed to add files to patch PCK:\n,No se pudieron añadir archivos al parche PCK:\n
+ui_0061,Failed to compile file:,No se pudo compilar el archivo:
+ui_0062,Failed to convert files:\n,Error al convertir los archivos:\n
+ui_0063,Failed to create decompiler for version:,No se pudo crear el descompilador para la versión:
+ui_0064,Failed to decompile file:,No se pudo descompilar el archivo:
+ui_0065,Failed to finish patch PCK:\n,Error al finalizar el parche PCK:\n
+ui_0066,Failed to load import files:\n,No se pudieron cargar los archivos de importación:\n
+ui_0067,Failed to load project:\n,No se pudo cargar el proyecto:\n
+ui_0068,Failed to open,No se pudo abrir
+ui_0069,Failed to open file for writing:,No se pudo abrir el archivo para escribir:
+ui_0070,Failed to patch project config:\n,No se pudo aplicar el parche a la configuración del proyecto:\n
+ui_0071,Failed to patch translation,No se pudo parchear la traducción
+ui_0072,Failed to read file:,No se pudo leer el archivo:
+ui_0073,Failed to remove existing PCK:\n,No se pudo eliminar el PCK existente:\n
+ui_0074,Failed to write PCK:\n,Error al escribir el PCK:\n
+ui_0075,File does not exist,El archivo no existe
+ui_0076,"File is NativeAOT assembly, not supported by GDRE Tools","El archivo es un ensamblado NativeAOT, no compatible con GDRE Tools."
+ui_0077,File is not a valid .NET IL assembly (corrupt?),El archivo no es un ensamblado .NET IL válido (¿dañado?)
+ui_0078,Files to patch...,Archivos a parchear...
+ui_0079,Files:,Archivos:
+ui_0080,Force Enable All Versions,Forzar habilitación de todas las versiones
+ui_0081,Full Recovery,Recuperación completa
+ui_0082,"GDExtension plugins have been detected.
+Do you want to automatically detect and download?","Se detectaron plugins GDExtension.
+¿Detectar y descargar automáticamente?"
+ui_0083,GDScript,GDScript
+ui_0084,GLTF,GLTF
+ui_0085,General,General
+ui_0086,Hide Preview,Ocultar vista previa
+ui_0087,Hide Resource Preview,Ocultar vista previa de recursos
+ui_0088,Important: Legal Notice,Importante: Aviso legal
+ui_0089,Include Filters:,Incluir filtros:
+ui_0090,Invalid CSV file:\n,Archivo CSV no válido:\n
+ui_0091,Invalid Selection!!,¡¡Selección no válida!!
+ui_0092,Invalid encryption script!\n,¡Script de cifrado no válido!\n
+ui_0093,Invalid key!\nKey must be a hex string with,¡Clave no válida!\nLa clave debe ser una cadena hexadecimal con
+ui_0094,Load a pack first!,¡Carga un paquete primero!
+ui_0095,Locales to patch...,Locales para parchear...
+ui_0096,"Log file written to <LOG_FILE_URI>
+[b]Please include this file when reporting an issue![/b]","Archivo de registro guardado en <LOG_FILE_URI>
+[b]¡Por favor, incluya este archivo al informar de un problema![/b]"
+ui_0097,Map selected to Folder...,Asignar selección a carpeta...
+ui_0098,"Multiple PCK files found, cannot patch","Se han encontrado varios archivos PCK, no se puede aplicar el parche."
+ui_0099,"No PCK files found, cannot patch","No se encontraron archivos PCK, no es posible aplicar el parche."
+ui_0100,No destination folder selected,No se ha seleccionado ninguna carpeta de destino
+ui_0101,No files selected,No hay archivos seleccionados
+ui_0102,Open File(s),Abrir archivo(s)
+ui_0103,Open Folder,Abrir carpeta
+ui_0104,Open a Directory,Abrir un directorio
+ui_0105,Open a File,Abrir un archivo
+ui_0106,Open a File or Directory,Abrir un archivo o directorio
+ui_0107,Optional decryption script for games with custom encryption,Script de descifrado opcional para juegos con cifrado personalizado
+ui_0108,Output files to directory,Exportar archivos al directorio
+ui_0109,PCK,PCK
+ui_0110,PCK Files...,Archivos PCK...
+ui_0111,PCK patching complete,Parcheo de PCK completado
+ui_0112,PCK version,Versión PCK
+ui_0113,Patch PCK,Parche PCK
+ui_0114,Patch PCK archive...,Parchear archivo PCK...
+ui_0115,Patch PCK created successfully,Parche PCK creado correctamente.
+ui_0116,Patch PCK directly,Aplique el parche a PCK directamente.
+ui_0117,Patch Translation...,Parchear traducción...
+ui_0118,Please add at least one translation,Por favor agregue al menos una traducción
+ui_0119,Please load a project first,Por favor cargue un proyecto primero
+ui_0120,Please select a CSV file,Por favor seleccione un archivo CSV
+ui_0121,Please select a translation,Por favor seleccione una traducción
+ui_0122,Please select at least one locale,Por favor seleccione al menos un locale
+ui_0123,Project Recovery,Recuperación del Proyecto
+ui_0124,Project to Patch...,Proyecto para parchear...
+ui_0125,Quit,Salir
+ui_0126,RE Tools,Herramientas RE
+ui_0127,Recover Project...,Recuperar proyecto...
+ui_0128,Recovery canceled!,¡Recuperación cancelada!
+ui_0129,Remove Files,Eliminar archivos
+ui_0130,Report a bug...,Informar un error...
+ui_0131,Reported Godot engine version (<minor>.<major>.<patch>),Versión del motor Godot reportada (<minor>.<major>.<patch>)
+ui_0132,Reset to Defaults,Restablecer los valores predeterminados
+ui_0133,Resources,Recursos
+ui_0134,"Sampling Rate: 48000
+Loop: No","Tasa de muestreo: 48000
+Bucle: No"
+ui_0135,Save,Guardar
+ui_0136,Save PCK...,Guardar PCK...
+ui_0137,Scene Exporter,Exportador de escenas
+ui_0138,Script Files,Archivos de script
+ui_0139,Script bytecode version:,Versión del código de bytes del script:
+ui_0140,Select,Seleccionar
+ui_0141,Select %s...,Seleccione %s...
+ui_0142,Select Action...,Seleccione Acción...
+ui_0143,Select Files...,Seleccionar archivos...
+ui_0144,Select Mapping,Seleccionar mapeo
+ui_0145,Select Output Directory,Seleccionar directorio de salida
+ui_0146,Select Translation to patch,Seleccione Traducción para parchear
+ui_0147,"Select \""Relative From...\"" Mapping","Seleccione \""Relativo de...\"" Mapeado"
+ui_0148,"Select \""Relative To...\"" Mapping","Seleccione \""Relativo a...\"" Mapeado"
+ui_0149,Select items to map!,¡Seleccione elementos para asignar!
+ui_0150,Select the C# assembly associated with this project...,Seleccione el ensamblado de C# asociado con este proyecto...
+ui_0151,Set Custom Decryption Script...,Establecer script de descifrado personalizado...
+ui_0152,Set Encryption Key,Establecer clave de cifrado
+ui_0153,Set Encryption Key (64 char hex string...),Establecer clave de cifrado (cadena hexadecimal de 64 caracteres...)
+ui_0154,Set encryption key...,Establecer clave de cifrado...
+ui_0155,Settings,Ajustes
+ui_0156,Settings...,Ajustes...
+ui_0157,Show Preview...,Mostrar vista previa...
+ui_0158,Show Resource Preview...,Mostrar vista previa de recursos...
+ui_0159,Switch to Scene View,Cambiar a vista de escena
+ui_0160,Total files:,Archivos totales:
+ui_0161,Translation patched successfully,Traducción parcheada exitosamente
+ui_0162,Translations to Patch,Traducciones para parchear
+ui_0163,Uncheck,Desmarcar
+ui_0164,Uncheck all,Desmarcar todo
+ui_0165,Unchecks all shown files,Desmarca todos los archivos mostrados
+ui_0166,Validation failed,La validación falló
+ui_0167,Version:,Versión:
+ui_0168,Watermark text,Texto de marca de agua
+ui_0169,You can only patch one PCK at a time,Solo puedes aplicar parches a un archivo PCK a la vez.
+ui_0170,[b]Important Notes[/b],[b]Notas importantes[/b]
+ui_0171,[b]Info:[/b],[b]Información:[/b]
+ui_0172,"[b]Path:[/b]
+[b]Type:[/b]
+[b]Format:[/b]","[b]Ruta:[/b]
+[b]Tipo:[/b]
+[b]Formato:[/b]"
+ui_0173,[b]Totals[/b],[b]Totales[/b]
+ui_0174,"[b]Use Godot editor version <GODOT_VER> to edit the project.[/b]
+<CUSTOM_VER_NOTE>","[b]Utilice la versión <GODOT_VER> del editor Godot para editar el proyecto.[/b]
+<CUSTOM_VER_NOTE>"
+ui_0175,[b]Version:[/b],[b]Versión:[/b]
+ui_0176,[color=#FF0000]ERROR:[/color],[color=#FF0000]ERROR:[/color]
+ui_0177,[color=#FF0000]ERROR[/color],[color=#FF0000]ERROR[/color]
+ui_0178,"\""Relative from...\"" mapping","\""Relativo de...\"" mapeado"
+ui_0179,"\""Relative to...\"" mapping","\""Relativo a...\"" mapeado"
+ui_0180,en_us,es_mx
+ui_0181,Create PCK archive from folder... ,Crear archivo PCK desde carpeta...
+ui_0182,Convert textures to PNG...,Convertir texturas a PNG...
+ui_0183,Convert OGG streams to OGG...,Convertir flujos OGG a OGG...
+ui_0184,Convert MP3 streams to MP3...,Convertir flujos MP3 a MP3...
+ui_0185,Convert samples to WAV...,Convertir muestras a WAV...
+ui_0186,OK,Aceptar
+ui_0187,Language,Idioma
+ui_0193,Spanish,Español
+ui_0194,General Settings,Ajustes generales
+ui_0195,Bytecode Settings,Ajustes de Bytecode
+ui_0196,CSharp Settings,Ajustes de C#
+ui_0197,Preview Settings,Ajustes de vista previa
+ui_0198,Recovery Settings,Ajustes de recuperación
+ui_0199,Translation,Traducción
+ui_0200,Scene,Escena
+ui_0201,Texture,Textura
+ui_0202,Auto-detect,Detección automática
+ui_0203,Select File...,Seleccionar archivo...
+ui_0204,Select Directory,Seleccionar directorio
+ui_0205,Load Custom Bytecode,Cargar bytecode personalizado
+ui_0206,Force Bytecode Revision,Forzar revisión de bytecode
+ui_0207,Force C# Language Level,Forzar nivel de lenguaje C#
+ui_0208,Load key hint file,Cargar archivo de pistas de claves
+ui_0209,Max cores for threaded tasks,Núcleos máximos para tareas en paralelo
+ui_0210,Default parent folder for recovery,Carpeta padre predeterminada para recuperación
+ui_0211,Last GDRE version used,Última versión de GDRE usada
+ui_0212,Download plugins,Descargar complementos
+ui_0213,Load embedded zips,Cargar zips incrustados
+ui_0214,Delete auto-converted files,Eliminar archivos autoconvertidos
+ui_0215,Force single-threaded mode,Forzar modo de un solo hilo
+ui_0216,Write JSON report,Escribir informe JSON
+ui_0217,Ask for download,Preguntar antes de descargar
+ui_0218,Last showed disclaimer,Último aviso mostrado
+ui_0219,Execute VisualShaderNodeCustom scripts,Ejecutar scripts VisualShaderNodeCustom
+ui_0220,Use scene view by default,Usar vista de escena por defecto
+ui_0221,Clear output directory except git before full recovery,Vaciar directorio de salida excepto git antes de recuperación completa
+ui_0222,Create git repo in recovered project,Crear repo git en el proyecto recuperado
+ui_0223,Add imports to git repo,Añadir imports al repo git
+ui_0224,Write NuGet package references,Escribir referencias de paquetes NuGet
+ui_0225,Copy referenced assemblies,Copiar ensamblados referenciados
+ui_0226,Verify NuGet package is from NuGet.org,Verificar que el paquete NuGet sea de NuGet.org
+ui_0227,Create additional projects for project references,Crear proyectos adicionales para referencias
+ui_0228,Remove generated Json context body,Eliminar cuerpo de contexto Json generado
+ui_0229,Enable collection initializer lifting,Habilitar elevación de inicializadores de colección
+ui_0230,Emit IL annotation comments,Emitir comentarios de anotación IL
+ui_0231,Compile after decompile,Compilar tras descompilar
+ui_0232,Copy template_release plugins to editor plugin,Copiar complementos template_release al editor
+ui_0233,Force lossless images,Forzar imágenes sin pérdida
+ui_0234,Use double precision,Usar doble precisión
+ui_0235,Force export multi root,Forzar exportación multirraíz
+ui_0236,Force require KHR_node_visibility extension,Requerir extensión KHR_node_visibility
+ui_0237,Ignore missing dependencies,Ignorar dependencias faltantes
+ui_0238,Remove physics bodies,Eliminar cuerpos físicos
+ui_0239,Replace shader materials,Reemplazar materiales shader
+ui_0240,Create debug copies,Crear copias de depuración
+ui_0241,Create lossless copy,Crear copia sin pérdida
+ui_0242,Disable translation key recovery,Desactivar recuperación de claves de traducción
+ui_0243,More thorough translation key recovery,Recuperación de claves más exhaustiva
+ui_0244,Skip loading resource strings,Omitir carga de cadenas de recursos
+ui_0245,Dump resource strings,Volcar cadenas de recursos
+ui_0246,Load a custom bytecode file.,Carga un archivo de bytecode personalizado.
+ui_0247,Forces the bytecode revision to be the specified value.,Fuerza que la revisión de bytecode sea el valor especificado.
+ui_0248,"By default, the C# language level is selected based on the default language level of the target framework of the module.
+This setting forces the C# language level to be the specified value.","De forma predeterminada, el nivel de lenguaje C# se selecciona según el nivel predeterminado del framework de destino del módulo.
+Esta opción fuerza el nivel de lenguaje C# al valor especificado."
+ui_0249,Load a key hint file to use for the translation exporter,Carga un archivo de pistas de claves para el exportador de traducciones.
+ui_0250,"The maximum number of cores to use for threaded tasks (Extract, project recovery, etc.)","El número máximo de núcleos a usar en tareas en paralelo (extracción, recuperación de proyecto, etc.)."
+ui_0251,"The default parent folder to use for recovery.
+If not set, the user's Desktop directory will be used.","La carpeta padre predeterminada para la recuperación.
+Si no se establece, se usará el escritorio del usuario."
+ui_0252,Automatically detect binary plugin versions and download them from the asset library,Detecta automáticamente las versiones de complementos binarios y las descarga de la biblioteca de assets.
+ui_0253,Load embedded zips within the project pack as part of project loading/recovery,Carga los zips incrustados dentro del pack del proyecto como parte de la carga/recuperación.
+ui_0254,"Delete auto-converted files (*.gdc, etc.) after exporting. If disabled, the files will be moved to the `.autoconverted` folder.","Elimina los archivos autoconvertidos (*.gdc, etc.) tras exportar. Si se desactiva, los archivos se moverán a la carpeta `.autoconverted`."
+ui_0255,Forces all tasks to run on the main thread,Fuerza que todas las tareas se ejecuten en el hilo principal.
+ui_0256,Write a JSON report to the output directory after exporting.,Escribe un informe JSON en el directorio de salida tras exportar.
+ui_0257,"Execute VisualShaderNodeCustom scripts when loading visual shaders.
+Setting this to `true` can fix errors occurring when exporting scenes that contain VisualShaders.
+
+WARNING: As this executes arbitrary code, this should be considered unsafe.
+Ensure that you trust the source code in this project before enabling this.","Ejecuta scripts VisualShaderNodeCustom al cargar shaders visuales.
+Activar esto puede corregir errores al exportar escenas con VisualShaders.
+
+AVISO: al ejecutarse código arbitrario, debe considerarse inseguro.
+Asegúrate de confiar en el código fuente del proyecto antes de activarlo."
+ui_0258,"Use scene view by default instead of the text preview.
+WARNING: Scene view is still experimental and certain scenes may cause the program to become unresponsive.","Usa la vista de escena por defecto en lugar de la vista previa de texto.
+AVISO: la vista de escena aún es experimental y ciertas escenas pueden dejar de responder."
+ui_0259,Clear the output directory except for the .git directory before running a full recovery (i.e. no includes/excludes),Vacía el directorio de salida excepto el directorio .git antes de una recuperación completa (sin inclusiones/exclusiones).
+ui_0260,"Create a git repo in the output directory after exporting.
+Requires git to be installed on the system.","Crea un repo git en el directorio de salida tras exportar.
+Requiere que git esté instalado en el sistema."
+ui_0261,Add .godot/imported/ (or .import/ for Godot 3) to the git repo.,Añade .godot/imported/ (o .import/ en Godot 3) al repo git.
+ui_0262,Detect and write NuGet package references to the project file instead of assembly references.,Detecta y escribe referencias de paquetes NuGet en el archivo de proyecto en lugar de referencias de ensamblado.
+ui_0263,Copy referenced assemblies to the project directory.,Copia los ensamblados referenciados al directorio del proyecto.
+ui_0264,"Verify that the NuGet package is from NuGet.org before writing it to the project file.
+WARNING: This involves downloading the package from nuget.org and checking the hash of the downloaded package.","Verifica que el paquete NuGet provenga de NuGet.org antes de escribirlo en el archivo de proyecto.
+AVISO: esto implica descargar el paquete de nuget.org y comprobar el hash descargado."
+ui_0265,"If a project reference is detected, create an additional project and add it to the solution.","Si se detecta una referencia de proyecto, crea un proyecto adicional y lo añade a la solución."
+ui_0266,Remove the body of generated JsonSourceGeneration context classes.,Elimina el cuerpo de las clases de contexto JsonSourceGeneration generadas.
+ui_0267,"Enable the LiftCollectionInitializers transform.
+If disabled, the legacy RemoveBogusBaseConstructorCalls transform is used.","Habilita la transformación LiftCollectionInitializers.
+Si se desactiva, se usa la transformación heredada RemoveBogusBaseConstructorCalls."
+ui_0268,"Emit ILInstruction annotations as comments for statement/expression nodes.
+Intended for debug verification of annotation propagation.","Emite anotaciones ILInstruction como comentarios en nodos de sentencia/expresión.
+Pensado para verificar la propagación de anotaciones al depurar."
+ui_0269,"Compile the C# project after decompiling.
+This is done to prevent editor errors when first opening the project in the editor.
+This requires that you have the dotnet sdk installed.","Compila el proyecto C# tras descompilar.
+Esto evita errores del editor al abrir el proyecto por primera vez.
+Requiere tener instalado el SDK de dotnet."
+ui_0270,"If the plugin was not downloaded, copy the template_release plugin (the library distributed with the game) to the editor plugin path (required for using the plugin in the editor).","Si el complemento no se descargó, copia el complemento template_release (la librería distribuida con el juego) a la ruta de complementos del editor (necesario para usarlo en el editor)."
+ui_0271,"Forces images to be saved as lossless PNGs when exporting to GLTF, regardless of the original image format","Fuerza guardar las imágenes como PNG sin pérdida al exportar a GLTF, sin importar el formato original."
+ui_0272,Uses double precision for all floating-point values in the GLTF document,Usa doble precisión para todos los valores de punto flotante del documento GLTF.
+ui_0273,"Forces the export to export in multi-root mode, even if the scene is a single root",Fuerza exportar en modo multirraíz aunque la escena tenga una sola raíz.
+ui_0274,"By default, the exporter will only set KHR_node_visibility as an optional extension.
+This setting forces the exporter to require the extension regardless of engine version.","Por defecto, el exportador solo marca KHR_node_visibility como extensión opcional.
+Esta opción fuerza requerir la extensión sin importar la versión del motor."
+ui_0275,Ignore missing dependencies when exporting the scene.,Ignora las dependencias faltantes al exportar la escena.
+ui_0276,"Removes physics bodies (CollisionShape3D, CollisionObject3D, etc.) from the scene when exporting to GLTF","Elimina los cuerpos físicos (CollisionShape3D, CollisionObject3D, etc.) de la escena al exportar a GLTF."
+ui_0277,"Replaces shader materials with generated standard materials when exporting the scene.
+Solves issues with exported scenes not having any textures.
+WARNING: This is experimental and may result in inaccurate exports.","Reemplaza los materiales shader con materiales estándar generados al exportar la escena.
+Soluciona escenas exportadas sin texturas.
+AVISO: es experimental y puede producir exportaciones imprecisas."
+ui_0278,For development.,Para desarrollo.
+ui_0279,Create a lossless .png copy of exported textures in '<OUTPUT_DIR>/.assets' if the texture is stored in a lossy format (e.g. jpeg),Crea una copia .png sin pérdida de las texturas exportadas en '<OUTPUT_DIR>/.assets' si la textura usa un formato con pérdida (p. ej. jpeg).
+ui_0280,"Disable translation key recovery.
+This will skip the translation key recovery process entirely.","Desactiva la recuperación de claves de traducción.
+Esto omite por completo el proceso de recuperación."
+ui_0281,"Enable more thorough translation key recovery.
+WARNING: this is not guaranteed to find all the keys in the translation file and may massively increase the time it takes to run.","Activa una recuperación de claves más exhaustiva.
+AVISO: no garantiza encontrar todas las claves y puede aumentar mucho el tiempo de ejecución."
+ui_0282,"Skip loading resource strings from all resources during translation recovery.
+Don't enable this without a key hint file.","Omite cargar cadenas de todos los recursos durante la recuperación.
+No lo actives sin un archivo de pistas de claves."
+ui_0283,Dumps collected resource strings to '<OUTPUT_DIR>/.assets/resource_strings.stringdump',Vuelca las cadenas recolectadas en '<OUTPUT_DIR>/.assets/resource_strings.stringdump'.
+ui_0284,Script Settings,Ajustes de scripts
+ui_0285,Indent,Sangría
+ui_0286,Indent type,Tipo de sangría
+ui_0287,The type of indentation to use when decompiling and displaying scripts.,El tipo de sangría a usar al descompilar y mostrar scripts.
+ui_0288,Tab size,Tamaño de tabulación
+ui_0289,The number of spaces to use when decompiling and displaying scripts.,El número de espacios a usar al descompilar y mostrar scripts.
+ui_0290,Tabs,Tabulaciones
+ui_0291,Spaces,Espacios
+ui_0292,Filter Files,Filtrar archivos
+ui_0293,Yes,Sí
+ui_0294,No,No
+ui_0295,Directory Structure,Estructura de directorios
+ui_0296,Export Scenes as,Exportar escenas como
+ui_0297,Export Meshes as,Exportar mallas como
+ui_0298,Flat,Plano
+ui_0299,Relative Hierarchical,Jerárquico relativo
+ui_0300,Absolute Hierarchical,Jerárquico absoluto
+ui_0301,Auto,Automático
+ui_0302,Broken files:,Archivos rotos:
+ui_0303,Malformed paths:,Rutas malformadas:
+ui_0304,Extract Selected...,Extraer selección...
+ui_0305,Export Selected...,Exportar selección...
+ui_0306,Exporting cancelled: ,Exportación cancelada: 
+ui_0307,Error: failed to open ,Error: no se pudo abrir 
+ui_0308,Failed to convert project config: ,No se pudo convertir la configuración del proyecto: 
+ui_0309,Failed to export file: ,No se pudo exportar el archivo: 
+ui_0310,Failed to export resource: ,No se pudo exportar el recurso: 
+ui_0311,File Name,Nombre del archivo
+ui_0312,Size,Tamaño
+ui_0313,Info,Información
+ui_0314,Inaccurate Project Export,Exportación imprecisa del proyecto
+ui_0315,"This version of GDRE Tools was built with single precision, but this project uses double precision.
+Resources exported with this version may be inaccurate.","Esta versión de GDRE Tools se compiló con precisión simple, pero el proyecto usa doble precisión.
+Los recursos exportados con esta versión pueden ser imprecisos."
+ui_0316,Custom Godot engine version detected,Versión personalizada del motor Godot detectada
+ui_0317,"Detected a custom version of the GodotSharp assembly.
+This project is likely using a custom version of the Godot engine.
+You may encounter errors when opening the project in the editor.","Se detectó una versión personalizada del ensamblado GodotSharp.
+El proyecto probablemente usa una versión personalizada del motor Godot.
+Puedes encontrar errores al abrir el proyecto en el editor."
+ui_0318,Unsupported Resources Detected,Recursos no soportados detectados
+ui_0319,"The following resource types were detected in the project that conversion is not implemented for yet.
+See Export Report to see which resources were not exported.
+You will still be able to edit the project in the editor regardless.","Se detectaron tipos de recursos para los que aún no hay conversión.
+Mira el informe de exportación para ver qué recursos no se exportaron.
+Podrás editar el proyecto en el editor de todos modos."
+ui_0320,Encryption Error,Error de cifrado
+ui_0321,"Failed to decompile encrypted scripts!
+Set the correct key and try again!","¡No se pudieron descompilar los scripts cifrados!
+¡Establece la clave correcta e inténtalo de nuevo!"
+ui_0322,Translation Export Incomplete,Exportación de traducción incompleta
+ui_0323,Missing GDExtension Libraries,Faltan librerías GDExtension
+ui_0324,"The following GDExtension addons could not be detected and downloaded.
+Tip: Try finding the plugin in the Godot Asset Library or Github.
+","No se pudieron detectar y descargar los siguientes complementos GDExtension.
+Consejo: busca el complemento en la biblioteca de assets de Godot o en Github.
+"
+ui_0325,"The following GDExtension addons could not be found for your platform.
+Tip: Try finding the plugin in the Godot Asset Library or Github.
+","No se encontraron los siguientes complementos GDExtension para tu plataforma.
+Consejo: busca el complemento en la biblioteca de assets de Godot o en Github.
+"
+ui_0326,Incomplete Plugin Export,Exportación de complementos incompleta
+ui_0327,"The following addons failed to have their plugin.cfg regenerated
+You may encounter editor errors due to this.
+Tip: Try finding the plugin in the Godot Asset Library or Github.
+","No se pudo regenerar el plugin.cfg de los siguientes complementos.
+Puedes encontrar errores del editor por esto.
+Consejo: busca el complemento en la biblioteca de assets de Godot o en Github.
+"
+ui_0328,Godot 2.x Assets,Assets de Godot 2.x
+ui_0329,All exported assets can be found in the '.assets' directory in the project folder.,Todos los assets exportados están en el directorio '.assets' de la carpeta del proyecto.
+ui_0330,Scene Export in headless mode is limited,Exportación de escenas en modo headless limitada
+ui_0331,"Some scenes can fail to export in headless mode. This is due to a limitation of the Godot engine.
+Retry without `--headless`. (CLI commands will still work in GUI mode.)","Algunas escenas pueden fallar al exportar en modo headless por una limitación del motor Godot.
+Reintenta sin `--headless`. (Los comandos CLI siguen funcionando en modo GUI.)"
+ui_0332,Successfully converted,Convertidos con éxito
+ui_0333,Decompiled scripts,Scripts descompilados
+ui_0334,Not converted,No convertidos
+ui_0335,Scripts not decompiled,Scripts no descompilados
+ui_0336,Failed conversions,Conversiones fallidas
+ui_0337,Lossy imports,Imports con pérdida
+ui_0338,Rewrote metadata,Metadatos reescritos
+ui_0339,Non-importable,No importables
+ui_0340,Failed to rewrite metadata MD5,No se pudo reescribir el MD5 de metadatos
+ui_0341,Failed to create plugin.cfg,No se pudo crear plugin.cfg
+ui_0342,Failed to copy GDExtension libraries,No se pudieron copiar las librerías GDExtension
+ui_0343,Unsupported types,Tipos no soportados
+ui_0344,Downloaded plugins,Complementos descargados
+ui_0345,"[b]This Project requires a Godot engine built with double precision.[/b]
+","[b]Este proyecto requiere un motor Godot compilado con doble precisión.[/b]
+"
+ui_0346,"You must build the engine with `precision=double` flag to edit this project.
+","Debes compilar el motor con `precision=double` para editar este proyecto.
+"
+ui_0347,See the Godot documentation,Ver la documentación de Godot
+ui_0348," for more information.
+"," para más información.
+"
+ui_0349,"[b]Custom Godot engine version detected!
+You may encounter errors when opening the project in the editor.[/b]
+","[b]¡Versión personalizada del motor Godot detectada!
+Puedes encontrar errores al abrir el proyecto en el editor.[/b]
+"
+ui_0350, (Steam Mono edition), (edición Steam Mono)
+ui_0351, (Steam edition), (edición Steam)
+ui_0352, (Mono), (Mono)
+ui_0353,Download URL:,URL de descarga:
+ui_0354,Open download URL,Abrir URL de descarga
+ui_0355,Select a directory...,Seleccionar un directorio...
+ui_0356,Select an exe...,Seleccionar un exe...
+ui_0357,Directory is not selected,No se ha seleccionado ningún directorio
+ui_0358,Embed source is empty,La fuente de incrustación está vacía
+ui_0359,Patch,Parchear
+ui_0360,File,Archivo
+ui_0361,Mapping,Mapeo
+ui_0362,Map to Folder...,Mapear a carpeta...
+ui_0363,: Folder is empty,: Carpeta vacía
+ui_0364,Patch Translation,Parchear traducción
+ui_0365,Translation Source,Fuente de traducción
+ui_0366,Locales to Patch,Locales a parchear
+ui_0367,Output to Directory,Exportar a directorio
+ui_0368,Create New Patch PCK,Crear nuevo PCK de parche
+ui_0369,Patch PCK Directly,Aplique el parche a PCK directamente.
+ui_0370,"Failed to load project:
+","No se pudo cargar el proyecto:
+"
+ui_0371,"Failed to load import files:
+","No se pudieron cargar los archivos de importación:
+"
+ui_0372,"Invalid CSV file:
+","Archivo CSV no válido:
+"
+ui_0373,Please ensure that the correct translation is selected and the CSV file is up to date.,Asegúrate de que la traducción correcta esté seleccionada y que el CSV esté actualizado.
+ui_0374,Failed to patch translation ,No se pudo parchear la traducción 
+ui_0375,"Failed to patch project config:
+","No se pudo parchear la configuración del proyecto:
+"
+ui_0376,"Failed to add files to patch PCK:
+","No se pudieron añadir archivos al PCK de parche:
+"
+ui_0377,"Failed to finish patch PCK:
+","No se pudo terminar el PCK de parche:
+"
+ui_0378,Warning,Advertencia
+ui_0379,Success,Éxito
+ui_0380,"The CSV file has a different number of messages than the translation file.
+","El CSV tiene un número de mensajes distinto al del archivo de traducción.
+"
+ui_0381,"CSV file keys = %d
+","Claves del CSV = %d
+"
+ui_0382,"Translation messages = %d
+","Mensajes de traducción = %d
+"
+ui_0383,"The resulting patched translation file may be corrupted!
+","¡El archivo de traducción parcheado resultante puede estar corrupto!
+"
+ui_0384,Could not parse CSV file,No se pudo analizar el archivo CSV
+ui_0385,CSV file does not have a 'key' column,El archivo CSV no tiene columna 'key'
+ui_0386,Compile,Compilar
+ui_0387,Decompile,Descompilar
+ui_0388,Open,Abrir
+ui_0389,Select Current Folder,Seleccionar carpeta actual
+ui_0390,Compile Complete,Compilación completa
+ui_0391,Compile Error,Error de compilación
+ui_0392,Decompiler Error,Error del descompilador
+ui_0393,File Error,Error de archivo
+ui_0394,Failed to compile file: ,No se pudo compilar el archivo: 
+ui_0395,Failed to create decompiler for version: ,No se pudo crear el descompilador para la versión: 
+ui_0396,The following files were successfully compiled: ,Los siguientes archivos se compilaron correctamente: 
+ui_0397,Decompile Complete,Descompilación completa
+ui_0398,Decompile Error,Error de descompilación
+ui_0399,ERROR: Failed to open file: ,ERROR: No se pudo abrir el archivo: 
+ui_0400,Failed to decompile file: ,No se pudo descompilar el archivo: 
+ui_0401,Invalid GDScript bytecode file: ,Archivo de bytecode GDScript no válido: 
+ui_0402,Multiple bytecode versions found: ,Múltiples versiones de bytecode encontradas: 
+ui_0403,No bytecode versions found,No se encontraron versiones de bytecode
+ui_0404,Select a bytecode version to see the decompiled code,Selecciona una versión de bytecode para ver el código descompilado
+ui_0405,Select a file and bytecode version to see the decompiled code,Selecciona un archivo y una versión de bytecode para ver el código descompilado
+ui_0406,Select a file to see the decompiled code,Selecciona un archivo para ver el código descompilado
+ui_0407,The following files were successfully decompiled: ,Los siguientes archivos se descompilaron correctamente: 
+ui_0408,WARNING:,ADVERTENCIA:
+ui_0409,WARNING: bytecode test failed for file: ,ADVERTENCIA: la prueba de bytecode falló para el archivo: 
+ui_0410,WARNING: Failed to create decompiler for revision: ,ADVERTENCIA: no se pudo crear el descompilador para la revisión: 
+ui_0411,ERROR: Failed to get bytecode buffer for encrypted file (did you set the encryption key?),ERROR: no se pudo obtener el búfer de bytecode del archivo cifrado (¿estableciste la clave de cifrado?)
+ui_0412,Failed to read file: ,No se pudo leer el archivo: 
+ui_0413,Failed to open file for writing: ,No se pudo abrir el archivo para escritura: 

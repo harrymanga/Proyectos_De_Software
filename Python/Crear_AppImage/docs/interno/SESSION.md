@@ -1,7 +1,7 @@
 # appimage-builder - Session State
 
 ## Project Overview
-**Project Path:** `/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/Proyectos/Proyectos_Python/Build/appimage_builder/`
+**Project Path:** `Proyectos_De_Software/Python/Crear_AppImage/` (antes en `.../Proyectos/Proyectos_Python/Build/appimage_builder/`, ruta antigua ya no válida)
 **Goal:** CLI + GUI (Qt/PySide6) application for automated AppImage creation
 **Target Users:** Basic users who want to create AppImages intuitively
 
@@ -491,7 +491,7 @@ pyside6-tools>=6.7.0
 ## Commands to Resume Work
 
 ```bash
-cd "/run/media/handerson/0CD2ACE7D2ACD66C/Carreras/Programacion/Proyectos/Proyectos_Python/Build/appimage_builder"
+cd "Proyectos_De_Software/Python/Crear_AppImage"  # antes: ".../Proyectos/Proyectos_Python/Build/appimage_builder"
 
 # Install dependencies
 pip install -e ".[dev,gui,build]"
