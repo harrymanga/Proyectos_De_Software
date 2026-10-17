@@ -1,0 +1,9 @@
+# Paquetes del sistema (no instalables por pip). El lanzador los verifica.
+# Linux (Debian/Ubuntu): sudo apt install bash tar gzip xz-utils zstd bzip2 makeself
+# Fedora: sudo dnf install bash tar gzip xz zstd bzip2 makeself
+# macOS: brew install bash gnu-tar gzip xz zstd makeself
+# Windows: instalar Git for Windows (Git-Bash) o MSYS2; makeself corre dentro de bash.
+bash
+tar
+gzip
+makeself

@@ -1,0 +1,4 @@
+# Paquetes del sistema (excepcion §56).
+# Uno por linea. Ejemplo si faltara Qt del sistema:
+# python3-venv
+# libgl1
