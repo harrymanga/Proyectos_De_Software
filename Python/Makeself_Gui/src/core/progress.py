@@ -5,6 +5,9 @@ import os
 import re
 
 _PERCENT = re.compile(r"(\d{1,3})%")
+# MojoSetup: "archivo: 43% (total progress: 8%)"
+_MOJO_TOTAL = re.compile(r"total progress:\s*(\d{1,3})%")
+_MOJO_FILE = re.compile(r"([^\r\n()]+?):\s*\d{1,3}%\s*\(")
 
 
 def find_percent(line: str) -> int | None:
@@ -43,6 +46,20 @@ _PHASES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("extract", ("uncompressing",)),
     ("compress", ("compress", "adding files")),
 )
+
+
+def find_total_percent(line: str) -> int | None:
+    """Extrae el progreso global de MojoSetup: 'f1.bin: 43% (total progress: 8%)'."""
+    match = _MOJO_TOTAL.search(line or "")
+    if not match:
+        return None
+    return max(0, min(100, int(match.group(1))))
+
+
+def find_current_file(line: str) -> str | None:
+    """Nombre del archivo que MojoSetup está instalando en esa línea."""
+    match = _MOJO_FILE.search(line or "")
+    return match.group(1) if match else None
 
 
 def detect_phase(block: str) -> str | None:

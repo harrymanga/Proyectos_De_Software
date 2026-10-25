@@ -1,0 +1,28 @@
+[project]
+name = "Mod_Maker"
+version = "0.1.0"
+description = "Herramienta multiplataforma para crear, editar y gestionar mods de Factorio"
+requires-python = ">=3.11"
+dependencies = [
+    "PySide6==6.12.0",
+    "toml==0.10.2",
+]
+
+[project.scripts]
+factorio-mod-maker = "src.gui.main_window:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true

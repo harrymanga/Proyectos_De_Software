@@ -22,7 +22,8 @@ python -m pytest -q
    - `universal`: instalador genérico multijuego — `./setup.sh [DESTINO] [--link] [--desktop]`, `--list`, genera `uninstall.sh`, tolera espacios.
    - `graphical`: asistente con zenity (verificación SHA256/MD5 visible, info del paquete, elegir destino, progreso %, accesos, ejecutar al final); sin GUI usa modo consola.
    - Flags del instalador tras `--`: `./juego.run -- DESTINO [--link] [--desktop] [--nogui] [--skip-verify]`.
-4. Modifica archivos → se guarda `proyecto.msgui.json` → recrea desde Crear.
+4. Pestaña MojoSetup (alternativa para juegos grandes): exporta un instalador que **elige destino y no llena `/tmp`** (ver `docs/mojosetup.md`). Requiere `scripts/build_mojosetup.sh` una vez.
+5. Modifica archivos → se guarda `proyecto.msgui.json` → recrea desde Crear.
 
 ## Qué esperar
 
@@ -37,6 +38,9 @@ python -m pytest -q
 - En Windows: ejecuta dentro de Git-Bash o instala MSYS2; `makeself` exige shell Unix.
 - Archivos >2GB: `--check` tarda; la GUI no se congela (hilos QThread).
 - Al **crear** en `/tmp` pequeño: cambia el campo Directorio temporal a un disco con ~2x el tamaño.
+- `Not enough space left in /tmp` al **ejecutar** un `.run` grande: es el stub de Makeself
+  comprobando espacio. Opciones, en este orden: mover `TMPDIR`, usar `--nodiskspace`,
+  o exportar con el backend MojoSetup (pestaña MojoSetup), que no usa staging.
 - Al **instalar** un `.run` grande con `/tmp` lleno: `TMPDIR=/disco/con/espacio ./app.run`
   (o `./app.run --target /disco/con/espacio/extraccion`). El instalador además
   re-pide destino si la carpeta elegida no tiene espacio.

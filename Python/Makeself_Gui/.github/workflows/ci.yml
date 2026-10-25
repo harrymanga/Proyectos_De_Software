@@ -13,3 +13,41 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt
       - run: python -m pytest -q
+
+  mojosetup-vendor:
+    # Verifica que los binarios vendorizados son ejecutables en su arquitectura.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Instalar dependencias de sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake make zip libgtk-3-dev libncurses-dev
+      - name: Compilar y vendorizar MojoSetup
+        run: scripts/build_mojosetup.sh --gui all
+      - name: Validar binarios vendorizados
+        run: |
+          file data/vendor/mojosetup/mojosetup
+          test -f data/vendor/mojosetup/LICENSE.txt
+          test -f data/vendor/mojosetup/scripts/mojosetup_init.lua
+      - name: Tests con binarios presentes
+        run: python -m pytest tests/test_mojo_export.py -q
+
+  arm64-cross:
+    # El paquete ARM64 se compila aparte; aquí solo se valida el toolchain.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar toolchain aarch64
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake make gcc-aarch64-linux-gnu libc6-dev-arm64-cross
+      - name: Compilar MojoSetup para ARM64
+        run: scripts/build_mojosetup_arm64.sh /usr/bin/aarch64-linux-gnu-gcc
+      - name: Verificar arquitectura del binario
+        run: |
+          file data/vendor/mojosetup-arm64/mojosetup | grep -q aarch64

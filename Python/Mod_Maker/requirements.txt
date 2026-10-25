@@ -1,0 +1,5 @@
+# Dependencias de Mod_Maker
+# Versiones fijadas para reproducibilidad (norma §34)
+
+PySide6==6.12.0
+toml==0.10.2

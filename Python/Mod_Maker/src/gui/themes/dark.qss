@@ -1,0 +1,59 @@
+/* Tema oscuro explícito para Mod_Maker */
+/* Norma §58: temas claro y oscuro explícitos, nunca el nativo como "claro" */
+
+QMainWindow {
+    background-color: #2b2b2b;
+    color: #ffffff;
+}
+QTabWidget::pane {
+    border: 1px solid #555555;
+    background-color: #2b2b2b;
+}
+QTabBar::tab {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    padding: 6px 12px;
+    border: 1px solid #555555;
+}
+QTabBar::tab:selected {
+    background-color: #2b2b2b;
+    border-bottom: 2px solid #007acc;
+}
+QMenuBar {
+    background-color: #3c3c3c;
+    color: #ffffff;
+}
+QMenuBar::item:selected {
+    background-color: #555555;
+}
+QMenu {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+}
+QMenu::item:selected {
+    background-color: #007acc;
+}
+QStatusBar {
+    background-color: #3c3c3c;
+    color: #ffffff;
+}
+QPushButton {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+    padding: 4px 8px;
+}
+QPushButton:hover {
+    background-color: #555555;
+}
+QLineEdit, QTextEdit, QPlainTextEdit {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+}
+QListWidget, QTreeWidget {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    border: 1px solid #555555;
+}

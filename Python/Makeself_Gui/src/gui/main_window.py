@@ -7,6 +7,7 @@ import os
 from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
     QFileDialog,
     QFormLayout,
@@ -27,10 +28,13 @@ from core.builder import build_argv
 from core.deps import check_deps, find_makeself
 from core.inspector import parse_info, run_info, suggest_extract_dir
 from core.model import MakeselfProject
+from core.mojo_export import MojoSettings, detect_launcher, plugin_warning, vendor_status
 from core.project import from_info, place_startup, save
 from core.space import check_space, fmt_size, uncompressed_kb
 from core.templates import TEMPLATES, generate_scaffold
 from core.validator import validate
+from gui.mojo_install_worker import MOJO_PHASES, MojoInstallWorker
+from gui.mojo_worker import MojoExportWorker
 from gui.workers import AppendWorker, CheckWorker, CreateWorker, ExtractWorker, InfoWorker
 from i18n import available_languages, translate
 
@@ -50,6 +54,7 @@ class MainWindow(QMainWindow):
         tabs.addTab(self._create_tab(), translate(lang, "tab.create"))
         tabs.addTab(self._inspect_tab(), translate(lang, "tab.inspect"))
         tabs.addTab(self._templates_tab(), translate(lang, "tab.templates"))
+        tabs.addTab(self._mojo_tab(), translate(lang, "tab.mojo"))
         self.setCentralWidget(tabs)
         self.tabs = tabs
         self.statusBar().showMessage(translate(lang, "status.ready"))
@@ -125,6 +130,14 @@ class MainWindow(QMainWindow):
             QSettings().value("tmpdir", os.environ.get("TMPDIR", "/tmp")))
         form.addRow(self._t("field.temp_dir"),
                     self._browse_row(self.temp_edit, self._pick_dir))
+        self.nodisk_checkbox = QCheckBox(self._t("field.nodisk"))
+        self.nodisk_checkbox.setToolTip(self._t("msg.nodisk_tip"))
+        self.nodisk_checkbox.stateChanged.connect(self._toggle_nodisk)
+        form.addRow(self.nodisk_checkbox)
+        # --nodiskspace es del stub al ejecutar, no de makeself al crear.
+        self.nodisk_label = QLabel("")
+        self.nodisk_label.setWordWrap(True)
+        form.addRow(self.nodisk_label)
         create_btn = QPushButton(self._t("btn.create"))
         create_btn.clicked.connect(self._start_create)
         form.addRow(create_btn)
@@ -201,6 +214,160 @@ class MainWindow(QMainWindow):
         worker.phase.connect(self._on_phase)
         worker.failed.connect(self._on_worker_error)
 
+    def _mojo_tab(self) -> QWidget:
+        widget = QWidget()
+        form = QFormLayout(widget)
+        ready, message = vendor_status()
+        state = QLabel(message if ready else message)
+        state.setStyleSheet("color: #2e7d32;" if ready else "color: #c62828;")
+        form.addRow(self._t("field.mojo_vendor"), state)
+        self.mojo_src = QLineEdit()
+        self.mojo_out = QLineEdit("/tmp/juego-instalador.bin")
+        self.mojo_label = QLineEdit("Mi Juego 1.0")
+        self.mojo_id = QLineEdit("mi-juego")
+        self.mojo_vendor = QLineEdit("miempresa.local")
+        self.mojo_version = QLineEdit("1.0")
+        self.mojo_dest = QLineEdit("")
+        self.mojo_recommended = QLineEdit("/opt/games, ~/.local/share/games")
+        self.mojo_launcher = QLineEdit("")
+        form.addRow(self._t("field.archive_dir"),
+                    self._browse_row(self.mojo_src, self._pick_dir))
+        form.addRow(self._t("field.mojo_output"),
+                    self._browse_row(self.mojo_out, self._pick_save_mojo))
+        form.addRow(self._t("field.label"), self.mojo_label)
+        form.addRow(self._t("field.mojo_id"), self.mojo_id)
+        form.addRow(self._t("field.mojo_vendor"), self.mojo_vendor)
+        form.addRow(self._t("field.mojo_version"), self.mojo_version)
+        form.addRow(self._t("field.mojo_dest"), self.mojo_dest)
+        form.addRow(self._t("field.mojo_recommended"), self.mojo_recommended)
+        form.addRow(self._t("field.mojo_launcher"), self.mojo_launcher)
+        detect_btn = QPushButton(self._t("btn.mojo_detect"))
+        detect_btn.clicked.connect(self._detect_mojo_launcher)
+        export_btn = QPushButton(self._t("btn.mojo_export"))
+        export_btn.clicked.connect(self._start_mojo_export)
+        test_btn = QPushButton(self._t("btn.mojo_test"))
+        test_btn.clicked.connect(self._start_mojo_test)
+        row = QHBoxLayout()
+        row.addWidget(detect_btn)
+        row.addWidget(export_btn)
+        row.addWidget(test_btn)
+        container = QWidget()
+        container.setLayout(row)
+        form.addRow(container)
+        form.addRow(QLabel(self._t("log.title")))
+        self.mojo_log = QTextEdit(readOnly=True)
+        form.addRow(self.mojo_log)
+        if not ready:
+            export_btn.setEnabled(False)
+            test_btn.setEnabled(False)
+        self.mojo_test_target = QLineEdit("")
+        form.addRow(self._t("field.mojo_test_target"), self.mojo_test_target)
+        return widget
+
+    def _start_mojo_test(self) -> None:
+        """Ejecuta el instalador exportado para ver el progreso real."""
+        out = self.mojo_out.text().strip()
+        if not out or not os.path.isfile(out):
+            QMessageBox.warning(self, self._t("msg.validation"),
+                                self._t("field.mojo_output"))
+            return
+        dest = self.mojo_test_target.text().strip()
+        if dest and not os.path.isdir(dest):
+            QMessageBox.warning(self, self._t("msg.validation"),
+                                f"{self._t('field.mojo_test_target')}: {dest}")
+            return
+        self.mojo_log.setText(self._t("btn.mojo_test"))
+        self.statusBar().showMessage(self._t("status.working"))
+        self._on_progress(-1)
+        self.worker = MojoInstallWorker(out, ui="stdio")
+        self.worker.progress.connect(self._on_progress)
+        self.worker.phase.connect(self._on_mojo_phase)
+        self.worker.current_file.connect(self._on_mojo_file)
+        self.worker.finished_ok.connect(self._on_mojo_test_done)
+        self.worker.failed.connect(self._on_worker_error)
+        self.worker.start()
+
+    def _on_mojo_phase(self, key: str) -> None:
+        label = MOJO_PHASES.get(key, key)
+        self.phase_label.setText(self._t("mojo_phase." + key)
+                                 if self._t("mojo_phase." + key) != "mojo_phase." + key
+                                 else label)
+
+    def _on_mojo_file(self, name: str) -> None:
+        self.statusBar().showMessage(f"{self._t('mojo_phase.install')} · {name}")
+
+    def _on_mojo_test_done(self, code: int, output: str) -> None:
+        self._progress_done()
+        self.mojo_log.append(output[-6000:])
+        self.statusBar().showMessage(self._t("status.done") if code == 0 else self._t("status.error"))
+        QMessageBox.information(self, self._t("btn.mojo_test"), output[-1500:])
+
+    def _pick_save_mojo(self, field: QLineEdit) -> None:
+        path, _ = QFileDialog.getSaveFileName(self, self._t("field.mojo_output"),
+                                              field.text(), "*.bin *.run *.sh")
+        if path:
+            field.setText(path)
+
+    def _detect_mojo_launcher(self) -> None:
+        src = self.mojo_src.text().strip()
+        if not src or not os.path.isdir(src):
+            QMessageBox.warning(self, self._t("msg.validation"), self._t("field.archive_dir"))
+            return
+        found = detect_launcher(src)
+        self.mojo_launcher.setText(found)
+        self.mojo_log.setText(f"{self._t('field.mojo_launcher')}: {found or '-'}")
+
+    def _start_mojo_export(self) -> None:
+        src = self.mojo_src.text().strip()
+        out = self.mojo_out.text().strip()
+        errors = []
+        if not os.path.isdir(src):
+            errors.append(self._t("field.archive_dir"))
+        if not out:
+            errors.append(self._t("field.mojo_output"))
+        if errors:
+            QMessageBox.warning(self, self._t("msg.validation"), "\n".join(errors))
+            return
+        launcher = self.mojo_launcher.text().strip() or detect_launcher(src)
+        recommended = [p.strip() for p in self.mojo_recommended.text().split(",") if p.strip()]
+        settings = MojoSettings(
+            vendor=self.mojo_vendor.text().strip() or "makeself-gui.local",
+            package_id=self.mojo_id.text().strip() or "miapp",
+            version=self.mojo_version.text().strip() or "1.0",
+            description=self.mojo_label.text().strip() or "Mi App",
+            destination=self.mojo_dest.text().strip(),
+            recommended=recommended,
+            launcher=launcher,
+            desktop_name=self.mojo_label.text().strip(),
+            genericname=self.mojo_label.text().strip(),
+        )
+        self.mojo_log.setText(f"{self._t('btn.mojo_export')}: {out}")
+        warning = plugin_warning()
+        if warning:
+            self.mojo_log.append(warning)
+        self.statusBar().showMessage(self._t("status.working"))
+        self._progress_done()
+        self.worker = MojoExportWorker(src, out, settings)
+        self.worker.finished_ok.connect(self._on_mojo_done)
+        self.worker.failed.connect(self._on_worker_error)
+        self.worker.start()
+
+    def _on_mojo_done(self, final: str, _detail: str) -> None:
+        self.statusBar().showMessage(self._t("status.done"))
+        self.mojo_log.append(f"{self._t('msg.mojo_done')}: {final}")
+        QMessageBox.information(self, self._t("status.done"), final)
+
+    def _toggle_nodisk(self, *_args) -> None:
+        """Muestra el comando de ejecución con --nodiskspace (flag del stub)."""
+        run = self.output_edit.text().strip()
+        if self.nodisk_checkbox.isChecked() and run:
+            tmp = self.temp_edit.text().strip()
+            prefix = f"TMPDIR={tmp} " if tmp else ""
+            self.nodisk_label.setText(
+                f"{prefix}sh {run} --nodiskspace -- {self._t('field.startup')}")
+        else:
+            self.nodisk_label.setText("")
+
     def _pick_dir(self, field: QLineEdit) -> None:
         selected = QFileDialog.getExistingDirectory(self, self._t("field.archive_dir"))
         if selected:
@@ -273,6 +440,8 @@ class MainWindow(QMainWindow):
                 return
         makeself_bin = find_makeself() or "makeself"
         self.create_log.setText("$ " + " ".join(build_argv(project, makeself_bin)))
+        if self.nodisk_checkbox.isChecked():
+            self.create_log.append(self._t("msg.nodisk"))
         self.statusBar().showMessage(self._t("status.working"))
         self._track(CreateWorker(project, makeself_bin, tmpdir))
         self.worker.finished_ok.connect(self._on_create_done)

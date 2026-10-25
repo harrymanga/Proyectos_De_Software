@@ -1,0 +1,6 @@
+# Paquetes del sistema no instalables por pip.
+# Declarar aquí cualquier dependencia de sistema requerida por la aplicación.
+# El lanzador los resuelve o indica el comando exacto de instalación (norma §56).
+# Ejemplo:
+# libqt6-core
+# libqt6-gui
