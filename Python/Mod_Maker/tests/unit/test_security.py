@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from src.core.security import (
@@ -11,7 +13,6 @@ from src.core.security import (
     validate_extraction_target,
     validate_mod_name,
 )
-from pathlib import Path
 
 
 def test_is_path_within_returns_true_for_child() -> None:

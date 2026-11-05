@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-import tempfile
 from pathlib import Path
 
-from src.core.config import ConfigManager, DEFAULT_CONFIG
+from src.core.config import DEFAULT_CONFIG, ConfigManager
 
 
 def test_default_config_values() -> None:

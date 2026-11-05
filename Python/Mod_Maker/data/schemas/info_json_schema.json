@@ -1,0 +1,52 @@
+"""Esquema JSON para validar `info.json` de mods de Factorio.
+
+Basado en la validación JSON de justarandomgeek/factoriomod-debug.
+Define la estructura esperada y los campos obligatorios/opcionales.
+"""
+
+from __future__ import annotations
+
+INFO_JSON_SCHEMA: dict = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Factorio Mod info.json",
+    "type": "object",
+    "required": ["name", "version"],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Nombre interno del mod (sin espacios ni caracteres especiales)",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[a-zA-Z0-9_]+$",
+        },
+        "version": {
+            "type": "string",
+            "description": "Versión semántica del mod (ej. 1.0.0)",
+            "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+        },
+        "author": {
+            "type": "string",
+            "description": "Autor del mod",
+        },
+        "description": {
+            "type": "string",
+            "description": "Descripción del mod",
+        },
+        "factorio_version": {
+            "type": "string",
+            "description": "Versión de Factorio compatible",
+            "enum": ["1.1", "2.0", "2.1"],
+        },
+        "dependencies": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Lista de mods dependientes",
+        },
+        "homepage": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL de la página del mod",
+        },
+    },
+    "additionalProperties": False,
+}

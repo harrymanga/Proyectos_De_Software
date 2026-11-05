@@ -21,3 +21,6 @@ htmlcov/
 *.swp
 *.swo
 *~
+.snapshots
+.ruff_cache
+.*

@@ -17,14 +17,16 @@ import platform
 import shutil
 import zipfile
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
+from src.core.debug_adapter import DebugSession
+from src.core.factorio_mod import ModMetadata
+from src.core.lua_debugger import LuaDebugAdapter
+from src.core.mod_packager import build_mod_zip
 from src.core.security import (
-    DANGEROUS_EXTENSIONS,
     SecurityError,
     is_dangerous_extension,
     validate_extraction_target,
-    validate_mod_name,
 )
 from src.plugins.base_plugin import GamePlugin
 
@@ -43,7 +45,7 @@ class FactorioPlugin(GamePlugin):
 
     # Carpetas típicas de mods de Factorio por sistema operativo (rutas base,
     # sin expandir variables de entorno en tiempo de definición de clase).
-    _MODS_FOLDERS: dict[str, list[str]] = {
+    _MODS_FOLDERS: ClassVar[dict[str, list[str]]] = {
         "windows": [
             "%APPDATA%/Factorio/mods",
         ],
@@ -59,8 +61,9 @@ class FactorioPlugin(GamePlugin):
     def __init__(self) -> None:
         super().__init__()
         self._custom_mods_folder: str | None = None
+        self._debug_adapter: LuaDebugAdapter | None = None
 
-    # Campos obligatorios en info.json
+    # Campos obligatorios en info.json según la documentación oficial
     _REQUIRED_METADATA_FIELDS = ("name", "version")
 
     def _resolve_path(self, path_template: str) -> Path:
@@ -181,6 +184,38 @@ class FactorioPlugin(GamePlugin):
             return False
         return True
 
+    def validate_folder(self, folder_path: Path) -> bool:
+        """Valida que una carpeta extraída sea un mod de Factorio válido.
+
+        Un mod válido es una carpeta que contiene un archivo info.json
+        con JSON parseable y los campos obligatorios (name, version).
+        """
+        folder_path = Path(folder_path)
+        if not folder_path.exists() or not folder_path.is_dir():
+            logger.warning("La carpeta no existe o no es válida: %s", folder_path)
+            return False
+
+        info_path = folder_path / INFO_JSON
+        if not info_path.exists():
+            logger.warning("Falta %s en la carpeta del mod: %s", INFO_JSON, folder_path)
+            return False
+
+        try:
+            with info_path.open("r", encoding="utf-8") as f:
+                metadata = json.load(f)
+            for field in self._REQUIRED_METADATA_FIELDS:
+                if field not in metadata or not str(metadata[field]).strip():
+                    logger.warning(
+                        "Campo obligatorio '%s' faltante o vacío en %s",
+                        field,
+                        folder_path,
+                    )
+                    return False
+        except Exception as exc:  # pragma: no cover - defensivo
+            logger.warning("Validación de carpeta fallida para %s: %s", folder_path, exc)
+            return False
+        return True
+
     def get_metadata(self, mod_path: Path) -> dict[str, Any] | None:
         """Lee los metadatos info.json de un mod de Factorio.
 
@@ -239,46 +274,9 @@ class FactorioPlugin(GamePlugin):
     def build(self, source_dir: Path, output_path: Path) -> None:
         """Empaqueta source_dir como un mod .zip de Factorio en output_path.
 
-        - Requiere info.json en source_dir.
-        - Bloquea extensiones potencialmente peligrosas.
-        - Crea la carpeta de salida si no existe.
+        Usa la función unificada mod_packager.build_mod_zip().
         """
-        source_dir = Path(source_dir)
-        output_path = Path(output_path)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        if not source_dir.is_dir():
-            raise SecurityError(f"La carpeta de origen no existe: {source_dir}")
-
-        info_path = source_dir / INFO_JSON
-        if not info_path.exists():
-            raise SecurityError(
-                f"Falta el archivo {INFO_JSON} en {source_dir}. "
-                "Un mod de Factorio requiere info.json."
-            )
-
-        # Validar que info.json tenga campos requeridos antes de empaquetar
-        try:
-            with info_path.open("r", encoding="utf-8") as f:
-                metadata = json.load(f)
-            for field in self._REQUIRED_METADATA_FIELDS:
-                if field not in metadata or not str(metadata[field]).strip():
-                    raise SecurityError(
-                        f"info.json carece del campo obligatorio '{field}'."
-                    )
-        except json.JSONDecodeError as exc:
-            raise SecurityError(f"info.json no es un JSON válido: {exc}") from exc
-
-        with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zip_ref:
-            for file_path in sorted(source_dir.rglob("*")):
-                if file_path.is_file():
-                    arcname = file_path.relative_to(source_dir)
-                    if is_dangerous_extension(file_path):
-                        logger.warning(
-                            "Saltando archivo potencialmente peligroso: %s", arcname
-                        )
-                        continue
-                    zip_ref.write(file_path, arcname)
+        build_mod_zip(source_dir, output_path)
         logger.info("Mod construido correctamente: %s -> %s", source_dir, output_path)
 
     # ------------------------------------------------------------------
@@ -291,21 +289,24 @@ class FactorioPlugin(GamePlugin):
         version: str,
         author: str = "",
         description: str = "",
-        factorio_version: str = "1.1",
+        factorio_version: str = "2.0",
         dependencies: list[str] | None = None,
     ) -> dict[str, Any]:
-        """Crea un diccionario de metadatos info.json para un mod nuevo."""
-        validate_mod_name(name)
-        if not version or not version.strip():
-            raise SecurityError("La versión del mod no puede estar vacía.")
-        return {
-            "name": name,
-            "version": version,
-            "author": author,
-            "description": description,
-            "factorio_version": factorio_version,
-            "dependencies": dependencies or [],
-        }
+        """Crea un diccionario de metadatos info.json para un mod nuevo.
+
+        Valida los campos según la documentación oficial de Factorio:
+        https://lua-api.factorio.com/latest/auxiliary/mod-structure.html#info.json
+        """
+        metadata = ModMetadata(
+            name=name,
+            version=version,
+            author=author,
+            description=description,
+            factorio_version=factorio_version,
+            dependencies=dependencies or [],
+        )
+        metadata.validate()
+        return metadata.to_dict()
 
     def save_info_json(self, source_dir: Path, metadata: dict[str, Any]) -> None:
         """Guarda info.json dentro de la carpeta de origen del mod."""
@@ -466,3 +467,87 @@ class FactorioPlugin(GamePlugin):
             )
 
         return conflicts
+
+    # ------------------------------------------------------------------
+    # Depuración de mods (Fase 9)
+    # ------------------------------------------------------------------
+
+    @property
+    def debug_adapter(self) -> LuaDebugAdapter:
+        """Devuelve el adaptador de depuración Lua, creándolo si es necesario."""
+        if self._debug_adapter is None:
+            self._debug_adapter = LuaDebugAdapter()
+        return self._debug_adapter
+
+    def is_debug_supported(self) -> bool:
+        """Devuelve True si la depuración de mods está soportada."""
+        return self.debug_adapter.is_supported()
+
+    def create_debug_session(self, session_id: str, mod_path: Path) -> DebugSession | None:
+        """Crea una nueva sesión de depuración para un mod."""
+        if not self.is_debug_supported():
+            logger.warning("Depuración Lua no disponible en este sistema")
+            return None
+        return self.debug_adapter.create_session(session_id, mod_path)
+
+    def get_debug_session(self, session_id: str) -> DebugSession | None:
+        """Devuelve una sesión de depuración existente."""
+        return self.debug_adapter.get_session(session_id)
+
+    def remove_debug_session(self, session_id: str) -> None:
+        """Elimina una sesión de depuración."""
+        self.debug_adapter.remove_session(session_id)
+
+    def start_debug(self, session_id: str) -> bool:
+        """Inicia la depuración de una sesión."""
+        session = self.get_debug_session(session_id)
+        if session is None:
+            return False
+        return self.debug_adapter.start(session_id)
+
+    def pause_debug(self, session_id: str) -> bool:
+        """Pausa la depuración de una sesión."""
+        session = self.get_debug_session(session_id)
+        if session is None:
+            return False
+        return self.debug_adapter.pause(session_id)
+
+    def resume_debug(self, session_id: str) -> bool:
+        """Reanuda la depuración de una sesión."""
+        session = self.get_debug_session(session_id)
+        if session is None:
+            return False
+        return self.debug_adapter.resume(session_id)
+
+    def stop_debug(self, session_id: str) -> bool:
+        """Detiene la depuración de una sesión."""
+        session = self.get_debug_session(session_id)
+        if session is None:
+            return False
+        return self.debug_adapter.stop(session_id)
+
+    def set_debug_breakpoint(self, session_id: str, file_path: str,
+                             line: int, condition: str | None = None) -> bool:
+        """Establece un punto de interrupción en una sesión de depuración."""
+        return self.debug_adapter.set_breakpoint(
+            session_id, file_path, line, condition
+        )
+
+    def remove_debug_breakpoint(self, session_id: str, file_path: str,
+                                line: int) -> bool:
+        """Elimina un punto de interrupción de una sesión de depuración."""
+        return self.debug_adapter.remove_breakpoint(
+            session_id, file_path, line
+        )
+
+    def get_debug_variables(self, session_id: str) -> dict[str, Any]:
+        """Obtiene las variables inspeccionables de una sesión de depuración."""
+        return self.debug_adapter.get_variables(session_id)
+
+    def get_debug_output(self, session_id: str) -> list[str]:
+        """Obtiene la salida de consola de una sesión de depuración."""
+        return self.debug_adapter.get_output(session_id)
+
+    def get_executable_lines(self, file_path: Path) -> list[int]:
+        """Devuelve las líneas ejecutables de un archivo Lua para breakpoints."""
+        return self.debug_adapter._get_executable_lines(file_path)

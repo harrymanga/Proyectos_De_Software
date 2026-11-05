@@ -24,9 +24,15 @@ call "%VENV_DIR%\Scripts\activate.bat"
 
 :: Instalar dependencias
 if exist requirements.txt (
-    echo [Mod_Maker] Instalando dependencias desde requirements.txt...
-    pip install --upgrade pip
-    pip install -r requirements.txt
+    echo [Mod_Maker] Revisando dependencias desde requirements.txt...
+    pip install --upgrade pip --quiet 2>nul
+    if pip install -r requirements.txt --quiet 2>nul (
+        echo [Mod_Maker] Dependencias instaladas correctamente
+    ) else (
+        echo [Mod_Maker] Instalando dependencias faltantes...
+        pip install --upgrade pip
+        pip install -r requirements.txt
+    )
 )
 
 :: Resolver paquetes del sistema si existen

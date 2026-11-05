@@ -27,7 +27,7 @@ class Worker(QRunnable):
         self.kwargs = kwargs
         self.signals = WorkerSignals()
 
-    def run(self) -> None:  # noqa: D401
+    def run(self) -> None:
         try:
             result = self.fn(*self.args, **self.kwargs)
         except Exception as exc:  # pragma: no cover - defensivo

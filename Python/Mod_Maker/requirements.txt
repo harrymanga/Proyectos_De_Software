@@ -3,3 +3,9 @@
 
 PySide6==6.12.0
 toml==0.10.2
+Pillow>=10.0.0
+rich>=15.0.0
+pyfiglet>=1.0.0
+questionary>=2.1.0
+colorama>=0.4.6
+tqdm>=4.70.0

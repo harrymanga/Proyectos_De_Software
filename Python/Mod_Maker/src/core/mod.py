@@ -30,7 +30,7 @@ class ModMetadata:
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "ModMetadata":
+    def from_dict(cls, data: dict) -> ModMetadata:
         return cls(
             name=data.get("name", ""),
             version=data.get("version", ""),

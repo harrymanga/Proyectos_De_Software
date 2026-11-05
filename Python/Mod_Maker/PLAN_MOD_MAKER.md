@@ -380,3 +380,288 @@ Este plan sigue el `AI_SOFTWARE_ENGINEERING_SYSTEM.md` v1.1, en particular:
 - §55 README operativo.
 - §56 Arranque sin fricción (`run.sh`/`run.bat`, `requirements.txt`, `system-packages.txt`).
 - §58 Stack GUI y plantillas (temas claro/oscuro explícitos, hilos para I/O, QSettings, log + statusbar, menús base).
+
+---
+
+## 17. Características implementadas de herramientas de referencia
+
+Se integraron funcionalidades de tres referentes de mods de Factorio:
+
+### 17.1 Langbergio/Factorio-Mod-Creator-Studio (GitHub)
+- **Formularios sin código** para crear items, tecnologías y recetas (`NewItemDialog`, `PrototypeGenerator`)
+- **Editor Lua** con resaltado de sintaxis y autocompletado (planificado en `LuaEditorDialog`)
+- **Generador de sprite sheets** (`SpriteSheetDialog`, `SpriteSheetGenerator` — requiere Pillow)
+- **Export ZIP con un clic** (`ExportModDialog`, `FactorioExporter`)
+- **JS → Lua translation** (planificado, fase avanzada)
+
+### 17.2 Supercraft Factorio Mod Generator (supercraft.host)
+- **Generador de mods para servidor** sin código (`TweakGenerator`, `TweaksDialog`)
+- **Sliders de tweaks**: velocidad de crafting, coste de recetas, tamaño de pilas, velocidad de minería, salud del jugador
+- **Generación de `data-final-fixes.lua`** automática
+- **Soporte Factorio 2.0 / 2.1** (`ModMetadata.factorio_version`)
+
+### 17.3 justarandomgeek/factoriomod-debug (VS Code Marketplace)
+- **Validación JSON de `info.json`** (`FactorioValidator`, `data/schemas/info_json_schema.json`)
+- **Language support** para archivos de locale y changelog (planificado)
+- **Packaging and publishing** (`FactorioExporter` → `mod_packager.build_mod_zip()`, exportación a `.zip`)
+- **Debug Adapter** (planificado, fase avanzada con `LuaDebugAdapter`)
+
+### 17.4 Unificación de empaquetado (DRY)
+Se eliminó la duplicación entre "Reconstruir mod", "Exportar ZIP con un clic" y "Packaging and publishing". Todas usan ahora la misma función:
+
+- **`src/core/mod_packager.py`** — `build_mod_zip()`: función única de empaquetado que valida `info.json`, bloquea extensiones peligrosas y crea el `.zip`
+- Usada por: `FactorioPlugin.build()`, `FactorioExporter.export_zip()`, `FactorioExporter.export_from_directory()`
+- **RebuildModDialog** y **ExportModDialog** comparten el mismo motor de empaquetado, solo difieren en el flujo de usuario (uno reconstruye desde carpeta extraída, otro exporta un mod en memoria)
+
+### 17.5 Gestión de archivos y editor avanzado (Fase 7 - COMPLETADA)
+- **`src/core/mod_file_manager.py`** — `ModFileManager`: crear, eliminar, renombrar archivos y carpetas dentro del mod con validación de seguridad (path traversal)
+- **`src/core/syntax_highlighter.py`** — `SyntaxHighlighterFactory` y highlighters para Lua, JSON, TOML, CFG y texto plano
+- **`src/core/lua_api.py`** — Definición de API de Factorio (funciones, eventos, tipos)
+- **`src/gui/widgets/edit_mod_tab.py`** — `EditModTab` con:
+  - Vista previa de imágenes (.png, .jpg, .jpeg, .bmp, .gif, .webp, .tga)
+  - Edición de archivos de texto con syntax highlighting
+  - Botones: Crear archivo, Crear carpeta, Renombrar, Eliminar
+  - Botones: Guardar Cambios, Reconstruir Mod, Cerrar
+  - Menú contextual (clic derecho) para operaciones rápidas
+  - Listado de archivos con iconos indicativos ([T] texto, [I] imagen, [D] carpeta, [ ] otro)
+- **`src/gui/widgets/lua_completer.py`** — Autocompletado de API de Factorio
+- **`src/gui/dialogs/lua_editor_dialog.py`** — `LuaEditorDialog` con editor Lua integrado
+
+### 17.6 Editor Lua con autocompletado (Fase 8 - EN PROGRESO)
+- **`src/core/lua_api.py`** — Definición de API de Factorio (funciones, eventos, tipos)
+- **`src/core/syntax_highlighter.py`** — SyntaxHighlighter para Lua, JSON, CFG y texto plano
+- **`src/gui/widgets/lua_completer.py`** — Autocompletado de API de Factorio
+- **`src/gui/dialogs/lua_editor_dialog.py`** — Editor Lua integrado con extracción, edición y reconstrucción
+
+### Archivos creados
+
+| Categoría | Archivos |
+|-----------|----------|
+| Núcleo (src/core/) | `factorio_mod.py`, `factorio_validator.py`, `prototype_generator.py`, `tweak_generator.py`, `sprite_sheet_generator.py`, `factorio_export.py`, `mod_template.py`, **`factorio_validator.py`**, **`factorio_plugin.py`**, **`plugin_system.py`**, **`mod_packager.py`**, **`mod_file_manager.py`**, **`syntax_highlighter.py`**, **`lua_api.py`** |
+| GUI (src/gui/dialogs/) | `new_item_dialog.py`, `tweaks_dialog.py`, `sprite_sheet_dialog.py`, `export_mod_dialog.py`, **`lua_editor_dialog.py`** |
+| GUI (src/gui/widgets/) | `mod_operations_panel.py`, `mods_explorer_panel.py`, **`edit_mod_tab.py`**, **`lua_completer.py`** |
+| Datos (data/) | `schemas/info_json_schema.json`, `templates/info_json_example.json`, `templates/README.md` |
+| Pruebas (tests/unit/) | `test_factorio_mod.py`, `test_factorio_validator.py`, `test_prototype_generator.py`, `test_tweak_generator.py`, `test_mod_template.py`, **`test_mod_packager.py`**, **`test_mod_packager_nested.py`**, **`test_syntax_highlighter.py`** |
+
+**Total de tests:** 78 (67 originales + 11 nuevos para syntax_highlighter), todos pasando.
+
+---
+
+## 18. Próximos pasos recomendados
+
+1. **Fase 9 — Integración con Debug Adapter** (LuaDebugAdapter, factoriomod-debug) — **COMPLETADA** ✅
+   - `src/core/debug_adapter.py`: interfaz base DebugAdapter, DebugSession, Breakpoint
+   - `src/core/lua_debugger.py`: implementación LuaDebugAdapter (detección de líneas ejecutables, breakpoints, variables, output de consola)
+   - `src/plugins/factorio_group/factorio_plugin.py`: integración de debug (create/start/pause/resume/stop_debug, set/remove_debug_breakpoint, get_debug_variables/output, validate_folder, is_debug_supported)
+   - `src/gui/dialogs/debug_console_dialog.py`: consola de depuración GUI con:
+     - Selector de mod (.zip o carpeta extraída, con detección automática de carpeta padre si se selecciona un archivo .lua)
+     - Controles Iniciar/Pausar/Reanudar/Detener
+     - Consola de salida de print() de Lua
+     - Lista de breakpoints con agregar/eliminar
+     - Panel de variables con agregar/editar/eliminar (tipos: int, float, bool, str, None)
+     - Robustez ante cierre de diálogo (manejo de RuntimeError en widgets PySide6)
+   - `tests/unit/test_debug_adapter.py`: 9 tests
+   - `tests/unit/test_lua_debugger.py`: 10 tests
+   - Total: 19 tests nuevos (97 total pasando)
+2. **Fase 10 — CLI tipo `fmtk`** para operaciones por terminal — **COMPLETADA** ✅
+   - `src/cli/mod_cli.py`: reescrito completamente con:
+     - Comandos en inglés: create, extract, rebuild, install, uninstall, list, info
+     - Nuevos comandos: debug (start/pause/resume/stop/list), variables (set/get/list/remove), breakpoints (add/remove/list)
+     - Estilos de salida con emojis (✓, ✗, ⚠, ℹ, →) para mejor UX
+     - Formato de tabla para información de mods (rich Table)
+     - Help texts mejorados para todos los comandos y subcomandos
+     - ASCII art logo (pyfiglet) al iniciar
+     - Menú interactivo (questionary) cuando no se especifica comando
+     - Barras de progreso (tqdm) en operaciones largas
+     - Normas de CLI implementadas (§63-#67): colores, tablas, progreso, ASCII, menús interactivos
+   - Todos los comandos probados y funcionando individualmente
+
+3. **Núcleo de creación de mods pulido** (`src/core/factorio_mod.py`):
+   - `ModMetadata` con validación completa según documentación oficial de Factorio
+   - Validación de nombres: solo letras minúsculas, números, guiones; sin espacios; no empieza ni termina con guion
+   - Validación de versión: formato número.número.número (ej. 1.0.0)
+   - Validación de factorio_version obligatorio
+   - `FactorioMod` con soporte para `data.lua`, `control.lua`, `data-final-fixes.lua`
+   - Generación de código Lua para prototipos (items, tecnologías)
+   - `ModValidationError` para errores específicos de validación
+
+4. **Diálogo de crear mod mejorado** (`src/gui/dialogs/create_mod_dialog.py`):
+   - Validación en tiempo real del nombre del mod
+   - Validadores de expresión regular para nombre y versión
+   - Campos adicionales: título, autor, descripción, factorio_version, homepage, dependencias
+   - Mensajes de ayuda y tooltips explicativos
+   - Información sobre estructura de carpetas de mods
+   - Botón Crear solo habilitado cuando todo es válido
+3. **Fase 11 — Empaquetado multiplataforma** (MSIX, DMG, AppImage)
+4. **Fase 12 — JS → Lua translation** (opcional)
+
+Una vez respondidas las preguntas de la sección 15, se puede proceder a redactar los ADR y continuar con las fases siguientes.
+
+---
+
+## 19. Regla de revisión periódica (cada 3 fases)
+
+Cada 3 fases de desarrollo, se debe:
+
+1. Volver a leer el `AI_SOFTWARE_ENGINEERING_SYSTEM.md` para verificar que el proyecto sigue alineado con todas las normas.
+2. Revisar todo el código implementado para identificar duplicaciones, código muerto o sobreingeniería.
+3. Revisar y ejecutar todos los tests para garantizar que nada se ha roto.
+4. Revisar la documentación para asegurar que esté actualizada con los cambios realizados.
+5. Refactorizar cualquier código que se haya vuelto innecesariamente complejo o duplicado.
+
+Esta regla evita que el proyecto se desvíe de sus principios originales y mantiene la calidad del código a lo largo del tiempo.
+
+---
+
+## 20. Revisión, pulido y factorización periódica (cada 3 fases)
+
+Dependiendo del proyecto, cada 3 fases de desarrollo se debe:
+
+1. Releer el `AI_SOFTWARE_ENGINEERING_SYSTEM.md` para verificar que el proyecto sigue alineado con todas las normas y no pierde coherencia.
+2. Revisar todo el código implementado para identificar duplicaciones, código muerto, sobreingeniería o archivos huérfanos.
+3. Revisar y ejecutar todos los tests para garantizar que nada se ha roto.
+4. Revisar la documentación para asegurar que esté actualizada con los cambios realizados.
+5. Pulir y factorizar cualquier código que se haya vuelto innecesariamente complejo, duplicado o que ya no se utilice.
+
+Esta norma se aplica además de la regla #19 para garantizar que el proyecto se mantenga lo más limpio posible a lo largo del tiempo.
+
+---
+
+## 21. Evitar bucles de respuesta redundante
+
+Se debe evitar realizar muchas iteraciones a respuestas redundantes o entrar en bucles cerrados donde el agente repite el mismo razonamiento sin avanzar.
+
+- Si después de realizar 3 iteraciones similares sobre un mismo punto el usuario sigue diciendo simplemente "continúa" o equivalente sin dar una dirección nueva, el agente debe **detenerse y hacer preguntas al usuario** para obtener una dirección concreta antes de seguir.
+- No se debe asumir que "continúa" significa avanzar automáticamente a la siguiente fase del plan sin confirmación.
+- El agente debe ofrecer opciones claras y esperar la decisión del usuario para evitar bucles de retroalimentación vacía.
+
+Esta norma garantiza que el proyecto avance con propósito y no se quede estancado en repeticiones sin valor agregado.
+
+---
+
+## 22. Snapshot del proyecto antes de cambios importantes
+
+Antes de realizar cualquier cambio significativo en el código (implementación de nuevas funcionalidades, refactorización, eliminación de archivos, cambios en arquitectura, etc.), se debe crear un **snapshot del estado actual del proyecto** para poder regresar a una instancia anterior si el cambio falla o introduce regresiones.
+
+El snapshot debe incluir:
+
+1. **Copia de seguridad del estado actual**: crear una copia del directorio del proyecto o utilizar control de versiones (git commit, git tag, o copia de seguridad manual en directorio con timestamp).
+2. **Ejecución de tests antes del cambio**: verificar que todos los tests pasan antes de iniciar cualquier modificación.
+3. **Documentar el cambio planeado**: anotar qué se va a modificar, por qué y qué se espera lograr.
+4. **Verificación posterior al cambio**: después de aplicar el cambio, ejecutar nuevamente todos los tests y verificar que la funcionalidad no se ha roto.
+5. **Rollback si es necesario**: si el cambio introduce errores o regresiones, restaurar el snapshot inmediatamente y reevaluar el enfoque.
+
+Esta norma protege al proyecto contra cambios que puedan romper la funcionalidad existente y permite una recuperación rápida ante problemas inesperados.
+
+---
+
+## 23. Colores y estilos de texto en CLI
+
+Usar colores en la terminal para diferenciar tipos de mensajes:
+
+- **Rojo**: Errores y fallos críticos
+- **Amarillo**: Advertencias
+- **Azul**: Información general
+- **Verde**: Éxitos y operaciones completadas
+
+Implementación por lenguaje:
+
+- **Python**: `colorama`, `rich` o `typer`
+- **Node.js/JavaScript**: `chalk` o `kleur`
+- **C/C++**: Códigos de escape ANSI o `ncurses`
+
+Ejemplo (Python con rich):
+```python
+from rich import print
+print("[red]Error:[/red] No se pudo completar la operación")
+print("[green]✓[/green] Operación completada correctamente")
+print("[yellow]⚠[/yellow] Advertencia: acción no recomendada")
+print("[blue]ℹ[/blue] Información adicional disponible")
+```
+
+---
+
+## 24. Tablas y cajas estructuradas en CLI
+
+Organizar datos en filas y columnas con bordes limpios en lugar de texto plano para mejorar la lectura:
+
+- **Python**: `rich` (tablas con bordes) o `tabulate`
+- **Node.js**: `cli-table3`
+
+Ejemplo (Python con rich):
+```python
+from rich.table import Table
+table = Table(title="Mods instalados")
+table.add_column("Nombre", style="cyan")
+table.add_column("Versión", style="magenta")
+table.add_row("MiMod", "1.0.0")
+print(table)
+```
+
+---
+
+## 25. Barras de progreso y indicadores de carga en CLI
+
+Mostrar indicadores visuales cuando el programa procesa algo que tome segundos o minutos:
+
+- **Python**: `tqdm` o `rich.progress`
+- **Node.js**: `ora` (spinners) o `cli-progress`
+
+Ejemplo (Python con tqdm):
+```python
+from tqdm import tqdm
+import time
+
+for i in tqdm(range(100), desc="Procesando mod..."):
+    time.sleep(0.01)
+```
+
+Ejemplo (Python con rich.progress):
+```python
+from rich.progress import Progress
+
+with Progress() as progress:
+    task = progress.add_task("[cyan]Extrayendo...", total=100)
+    while not progress.finished:
+        progress.update(task, advance=10)
+```
+
+---
+
+## 26. Arte ASCII y Logos en CLI
+
+Incluir un encabezado con logo o nombre de la herramienta en texto grande (figlet/banner) al iniciar el programa para mejorar la identidad visual:
+
+- **Python**: `pyfiglet` o `banner`
+- **Node.js**: `figlet` o `cli-banner`
+
+Ejemplo (Python con pyfiglet):
+```python
+from pyfiglet import Figlet
+f = Figlet(font='slant')
+print(f.renderText('Mod Maker'))
+```
+
+---
+
+## 27. Menús interactivos en CLI
+
+Ofrecer menús con flechas para seleccionar opciones en lugar de obligar al usuario a recordar todos los comandos y argumentos:
+
+- **Python**: `questionary` o `InquirerPy`
+- **Node.js**: `inquirer`
+
+Ejemplo (Python con questionary):
+```python
+import questionary
+
+opcion = questionary.select(
+    "¿Qué deseas hacer?",
+    choices=["Crear mod", "Extraer mod", "Reconstruir mod", "Salir"]
+).ask()
+```
+
+---
+
+Una vez respondidas las preguntas de la sección 15, se puede proceder a redactar los ADR y continuar con las fases siguientes.
+

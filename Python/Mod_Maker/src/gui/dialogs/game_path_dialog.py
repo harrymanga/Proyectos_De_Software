@@ -1,12 +1,13 @@
-"""Diálogo genérico para configurar la ubicación de la carpeta de mods de un juego."""
+"""Diálogo genérico para configurar la ubicación de la carpeta de mods de un juego.
+
+Diseñado para ser embebido como pestaña en la ventana principal.
+"""
 
 from __future__ import annotations
 
 from pathlib import Path
 
 from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
     QFileDialog,
     QHBoxLayout,
     QLabel,
@@ -14,15 +15,15 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QVBoxLayout,
+    QWidget,
 )
 
-from src.core.i18n import translate
 from src.core.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-class GamePathDialog(QDialog):
+class GamePathDialog(QWidget):
     """Diálogo para configurar manualmente la carpeta de mods de cualquier juego."""
 
     def __init__(
@@ -33,13 +34,13 @@ class GamePathDialog(QDialog):
     ) -> None:
         super().__init__(parent)
         self.game_name = game_name
-        self.setWindowTitle(f"Configurar carpeta de mods — {game_name}")
-        self.setMinimumWidth(500)
         self._selected_path: str | None = None
         self._setup_ui(current_path)
 
     def _setup_ui(self, current_path: str | None) -> None:
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(5)
 
         label = QLabel(
             f"No se pudo detectar automáticamente la carpeta de mods de "
@@ -50,6 +51,8 @@ class GamePathDialog(QDialog):
         layout.addWidget(label)
 
         form = QHBoxLayout()
+        form.setContentsMargins(0, 0, 0, 0)
+        form.setSpacing(5)
         self.path_edit = QLineEdit()
         if current_path:
             self.path_edit.setText(current_path)
@@ -60,13 +63,19 @@ class GamePathDialog(QDialog):
         form.addWidget(browse_btn)
         layout.addLayout(form)
 
-        self.button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
-        )
-        self.button_box.accepted.connect(self._accept)
-        self.button_box.rejected.connect(self.reject)
-        self.button_box.button(QDialogButtonBox.StandardButton.Ok).setText("Aceptar")
-        layout.addWidget(self.button_box)
+        btn_layout = QHBoxLayout()
+        btn_layout.setContentsMargins(0, 0, 0, 0)
+        btn_layout.setSpacing(5)
+
+        self.accept_btn = QPushButton("Aceptar")
+        self.accept_btn.clicked.connect(self._accept)
+        btn_layout.addWidget(self.accept_btn)
+
+        self.cancel_btn = QPushButton("Cancelar")
+        self.cancel_btn.clicked.connect(lambda: self.setVisible(False))
+        btn_layout.addWidget(self.cancel_btn)
+        btn_layout.addStretch()
+        layout.addLayout(btn_layout)
 
     def _browse(self) -> None:
         folder = QFileDialog.getExistingDirectory(
@@ -93,7 +102,12 @@ class GamePathDialog(QDialog):
             )
             return
         self._selected_path = str(path)
-        self.accept()
+        self._emit_selected()
+
+    def _emit_selected(self) -> None:
+        """Emite la señal de selección de ruta (para uso con contenedor padre)."""
+        if hasattr(self.parent(), "on_game_path_selected"):
+            self.parent().on_game_path_selected(self._selected_path)
 
     def get_selected_path(self) -> str | None:
         """Devuelve la ruta seleccionada por el usuario."""

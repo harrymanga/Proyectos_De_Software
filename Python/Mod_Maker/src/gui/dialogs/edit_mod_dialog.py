@@ -6,7 +6,6 @@ y reconstruirlo todo desde una sola interfaz.
 
 from __future__ import annotations
 
-import shutil
 import zipfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -14,7 +13,6 @@ from tempfile import TemporaryDirectory
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
-    QDialogButtonBox,
     QFileDialog,
     QHBoxLayout,
     QLabel,
@@ -28,7 +26,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from src.core.i18n import translate
 from src.core.logger import get_logger
 from src.plugins.factorio_group.factorio_plugin import FactorioPlugin
 
@@ -48,9 +45,6 @@ class EditModDialog(QDialog):
         self._temp_dir: TemporaryDirectory | None = None
         self._extracted_dir: Path | None = None
         self._current_file: Path | None = None
-        self.setWindowTitle(f"Editar mod: {self.mod_path.name}")
-        self.resize(900, 700)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self._setup_ui()
         self._extract_mod()
 
@@ -131,6 +125,34 @@ class EditModDialog(QDialog):
 
             with zipfile.ZipFile(self.mod_path, "r") as zip_ref:
                 zip_ref.extractall(self._extracted_dir)
+
+            # Detectar la carpeta contenedora del mod.
+            # Los mods de Factorio pueden venir como:
+            #   info.json (raíz del ZIP)
+            #   MiMod/info.json (una carpeta contenedora)
+            #   MiMod/sub/info.json (más profundo)
+            #
+            # Buscar info.json de forma case-insensitive y recursiva.
+            info_files: list[Path] = []
+            for f in self._extracted_dir.rglob("*"):
+                if f.is_file() and f.name.lower() == "info.json":
+                    info_files.append(f)
+
+            if info_files:
+                # Usar el directorio padre del primer info.json encontrado
+                self._source_dir = info_files[0].parent
+                logger.info(
+                    "Carpeta de mod detectada: %s (contiene %s)",
+                    self._source_dir,
+                    info_files[0].name,
+                )
+            else:
+                # No se encontró info.json; usar la carpeta extraída tal cual
+                self._source_dir = self._extracted_dir
+                logger.warning(
+                    "No se encontró info.json en %s; usando carpeta raíz",
+                    self._extracted_dir,
+                )
 
             self._populate_files_list()
         except Exception as exc:  # pragma: no cover - defensivo
@@ -233,7 +255,7 @@ class EditModDialog(QDialog):
             output_path = output_path.with_suffix(".zip")
 
         try:
-            self.plugin.build(self._extracted_dir, output_path)
+            self.plugin.build(self._source_dir, output_path)
             QMessageBox.information(
                 self,
                 "Mod reconstruido",
@@ -248,7 +270,7 @@ class EditModDialog(QDialog):
                 f"No se pudo reconstruir el mod: {exc}",
             )
 
-    def closeEvent(self, event) -> None:  # noqa: N802
+    def closeEvent(self, event) -> None:
         # Limpiar directorio temporal
         if self._temp_dir:
             self._temp_dir.cleanup()

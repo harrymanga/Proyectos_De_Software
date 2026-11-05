@@ -1,0 +1,9 @@
+{
+  "name": "MyMod",
+  "version": "1.0.0",
+  "author": "Tu Nombre",
+  "description": "Un mod de Factorio creado con Mod_Maker",
+  "factorio_version": "2.0",
+  "dependencies": ["base"],
+  "homepage": ""
+}
